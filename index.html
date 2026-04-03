@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNG Command Center — April 03, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal-dark: #076261;
+  --teal: #119090;
+  --teal-light: #1ab5b5;
+  --teal-glow: rgba(17,144,144,0.15);
+  --gold: #c9a84c;
+  --gold-light: #e8d48b;
+  --bg: #0a0f1a;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2235;
+  --bg-surface: #0d1525;
+  --text: #e2e8f0;
+  --text-muted: #8892a4;
+  --text-dim: #4a5568;
+  --border: #1e2a3a;
+  --red: #ef4444;
+  --red-soft: rgba(239,68,68,0.15);
+  --amber: #f59e0b;
+  --amber-soft: rgba(245,158,11,0.15);
+  --green: #10b981;
+  --green-soft: rgba(16,185,129,0.15);
+  --blue: #3b82f6;
+  --blue-soft: rgba(59,130,246,0.15);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Open Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+h1,h2,h3,h4 { font-family: 'Montserrat', sans-serif; }
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #041c1c 0%, var(--teal-dark) 40%, #0a3d3d 100%);
+  padding: 0;
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 1px solid rgba(17,144,144,0.3);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+.header-inner {
+  max-width: 1440px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px;
+}
+.header-left { display: flex; align-items: center; gap: 20px; }
+.logo { height: 48px; filter: brightness(1.1); }
+.header-title { font-family: 'Montserrat', sans-serif; }
+.header-title h1 {
+  font-size: 20px; font-weight: 800; color: #fff;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.header-title .subtitle {
+  font-size: 12px; color: var(--teal-light); font-weight: 500;
+  letter-spacing: 1px; text-transform: uppercase; margin-top: 2px;
+}
+.header-right { text-align: right; }
+.header-date { font-size: 12px; color: rgba(255,255,255,0.6); }
+.header-week { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+.live-dot {
+  display: inline-block; width: 8px; height: 8px; background: var(--green);
+  border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex; gap: 0; background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px; overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab {
+  padding: 14px 20px; cursor: pointer; font-family: 'Montserrat', sans-serif;
+  font-weight: 600; font-size: 12px; letter-spacing: 0.5px;
+  text-transform: uppercase; color: var(--text-muted);
+  border-bottom: 2px solid transparent; transition: all 0.25s;
+  white-space: nowrap; user-select: none;
+}
+.tab:hover { color: var(--teal-light); }
+.tab.active { color: var(--teal-light); border-bottom-color: var(--teal); }
+
+/* ── MAIN ── */
+.main { max-width: 1440px; margin: 0 auto; padding: 24px; }
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── KPI CARDS ── */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px; margin-bottom: 28px;
+}
+.kpi {
+  background: var(--bg-card); border-radius: 16px; padding: 20px 16px;
+  border: 1px solid var(--border); text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative; overflow: hidden;
+}
+.kpi:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+.kpi::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--teal); border-radius: 16px 16px 0 0;
+}
+.kpi.alert::before { background: var(--red); }
+.kpi.warn::before { background: var(--amber); }
+.kpi.good::before { background: var(--green); }
+.kpi-icon { font-size: 24px; margin-bottom: 8px; }
+.kpi .value {
+  font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, var(--teal-light) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.kpi.alert .value {
+  background: linear-gradient(135deg, #fff 0%, var(--red) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.kpi.good .value {
+  background: linear-gradient(135deg, #fff 0%, var(--green) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.kpi .label {
+  font-size: 10px; color: var(--text-muted); margin-top: 6px;
+  text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 700;
+  color: #fff; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+}
+.section-header::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+}
+
+/* ── TABLES ── */
+.table-wrap {
+  background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);
+  overflow: hidden; margin-bottom: 24px;
+}
+.table-wrap.scrollable { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left; padding: 14px 16px;
+  background: linear-gradient(135deg, var(--teal-dark) 0%, #0a4040 100%);
+  color: rgba(255,255,255,0.9); font-family: 'Montserrat', sans-serif;
+  font-weight: 600; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; white-space: nowrap;
+}
+th:first-child { border-radius: 0; }
+td { padding: 12px 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+tr:hover { background: rgba(17,144,144,0.04); }
+a { color: var(--teal-light); text-decoration: none; transition: color 0.2s; }
+a:hover { color: #fff; }
+
+/* ── BARS ── */
+.bar-cell { display: flex; align-items: center; gap: 10px; }
+.bar-track { flex:1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; min-width: 60px; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+.bar-fill.teal { background: linear-gradient(90deg, var(--teal-dark), var(--teal-light)); }
+.bar-fill.green { background: linear-gradient(90deg, #065f46, var(--green)); }
+.bar-fill.red { background: linear-gradient(90deg, #7f1d1d, var(--red)); }
+.bar-fill.amber { background: linear-gradient(90deg, #78350f, var(--amber)); }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+}
+.badge-teal { background: var(--teal-glow); color: var(--teal-light); }
+.badge-green { background: var(--green-soft); color: var(--green); }
+.badge-red { background: var(--red-soft); color: var(--red); }
+.badge-amber { background: var(--amber-soft); color: var(--amber); }
+.badge-blue { background: var(--blue-soft); color: var(--blue); }
+.badge-gold { background: rgba(201,168,76,0.15); color: var(--gold); }
+
+/* ── METRIC COLORS ── */
+.c-red { color: var(--red); }
+.c-amber { color: var(--amber); }
+.c-green { color: var(--green); }
+.c-teal { color: var(--teal-light); }
+.c-muted { color: var(--text-muted); }
+.fw-bold { font-weight: 700; }
+
+/* ── AGENT CARDS ── */
+.agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+.agent-card {
+  background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);
+  overflow: hidden; cursor: pointer; transition: all 0.25s;
+}
+.agent-card:hover { border-color: var(--teal); box-shadow: 0 0 20px rgba(17,144,144,0.1); transform: translateY(-2px); }
+.agent-card-header {
+  padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(135deg, rgba(17,144,144,0.08) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border);
+}
+.agent-name { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; color: #fff; }
+.agent-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.agent-card-body { padding: 16px 20px; }
+.metric-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid rgba(30,42,58,0.5); font-size: 13px;
+}
+.metric-row:last-child { border-bottom: none; }
+.metric-label { color: var(--text-muted); font-size: 12px; }
+.metric-value { font-weight: 700; font-family: 'Montserrat', sans-serif; }
+
+/* ── DETAIL PANEL ── */
+.detail-panel {
+  display: none; border-top: 1px solid var(--border);
+  padding: 16px 20px; background: rgba(0,0,0,0.15);
+}
+.detail-panel.open { display: block; animation: fadeIn 0.2s ease; }
+.detail-section { margin-bottom: 16px; }
+.detail-section h4 {
+  font-size: 12px; font-weight: 700; color: var(--teal-light);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.detail-section table th { padding: 8px 12px; font-size: 10px; }
+.detail-section table td { padding: 8px 12px; font-size: 12px; }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex; gap: 12px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;
+}
+.filter-bar input, .filter-bar select {
+  padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text); font-size: 13px;
+  font-family: 'Open Sans', sans-serif; outline: none; transition: border-color 0.2s;
+}
+.filter-bar input:focus, .filter-bar select:focus { border-color: var(--teal); }
+.filter-bar input { width: 220px; }
+.filter-bar select { cursor: pointer; }
+
+/* ── ROLLUP ── */
+.rollup-card {
+  background: var(--bg-card); border-radius: 16px; padding: 24px;
+  border: 1px solid var(--border); margin-bottom: 20px;
+}
+.rollup-card h3 {
+  font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700;
+  color: #fff; margin-bottom: 16px;
+}
+.action-item {
+  padding: 12px 16px; border-radius: 10px; margin-bottom: 8px;
+  font-size: 13px; line-height: 1.6; display: flex; gap: 12px; align-items: flex-start;
+}
+.action-item.red { background: var(--red-soft); border-left: 3px solid var(--red); }
+.action-item.amber { background: var(--amber-soft); border-left: 3px solid var(--amber); }
+.action-item.green { background: var(--green-soft); border-left: 3px solid var(--green); }
+.action-item.blue { background: var(--blue-soft); border-left: 3px solid var(--blue); }
+.action-label { font-weight: 700; white-space: nowrap; }
+
+/* ── MINI CHART (CSS-based) ── */
+.sparkbar { display: flex; gap: 2px; align-items: flex-end; height: 32px; }
+.sparkbar-segment {
+  width: 6px; border-radius: 2px; background: var(--teal);
+  transition: height 0.4s ease;
+}
+
+/* ── FUNNEL VIZ ── */
+.funnel { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; }
+.funnel-row { display: flex; align-items: center; gap: 12px; }
+.funnel-label { width: 130px; text-align: right; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.funnel-bar-track { flex: 1; height: 28px; background: var(--border); border-radius: 6px; overflow: hidden; position: relative; }
+.funnel-bar-fill {
+  height: 100%; border-radius: 6px; display: flex; align-items: center;
+  padding: 0 12px; font-size: 12px; font-weight: 700; color: #fff;
+  transition: width 0.8s ease; min-width: 40px;
+}
+.funnel-bar-fill.teal { background: linear-gradient(90deg, var(--teal-dark), var(--teal-light)); }
+.funnel-bar-fill.green { background: linear-gradient(90deg, #065f46, var(--green)); }
+.funnel-bar-fill.amber { background: linear-gradient(90deg, #78350f, var(--amber)); }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .header-inner { flex-direction: column; gap: 10px; text-align: center; }
+  .header-right { text-align: center; }
+  .header-title h1 { font-size: 16px; }
+  .logo { height: 36px; }
+  .tabs { padding: 0 12px; }
+  .tab { padding: 12px 14px; font-size: 11px; }
+  .main { padding: 16px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .kpi { padding: 14px 10px; }
+  .kpi .value { font-size: 24px; }
+  .kpi .label { font-size: 9px; }
+  .agent-grid { grid-template-columns: 1fr; }
+  .table-wrap { border-radius: 12px; }
+  .table-wrap.scrollable { -webkit-overflow-scrolling: touch; }
+  table { font-size: 12px; }
+  th, td { padding: 10px 10px; }
+  .filter-bar input { width: 100%; }
+  .filter-bar { flex-direction: column; }
+  .funnel-label { width: 90px; font-size: 11px; }
+  .bar-track { min-width: 40px; }
+  .section-header { font-size: 14px; }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi .value { font-size: 22px; }
+  .header-title h1 { font-size: 14px; }
+  .tab { padding: 10px 10px; font-size: 10px; }
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center; padding: 30px; color: var(--text-dim);
+  font-size: 11px; border-top: 1px solid var(--border); margin-top: 40px;
+}
+.footer img { height: 24px; opacity: 0.3; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <img src="https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/1abc07f7-edce-49cb-b4ce-ec2cd52a4508" alt="The Newcomer Group" class="logo"
+           onerror="this.style.display='none'">
+      <div class="header-title">
+        <h1>Leadership Command Center</h1>
+        <div class="subtitle">Agent Performance &amp; Pipeline Intelligence</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-date">
+        <span class="live-dot"></span>
+        Friday, April 03, 2026
+      </div>
+      <div class="header-week">
+        Week of Mar 30 — Apr 05 &bull; 19 Agents
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs" role="tablist">
+  <div class="tab active" onclick="switchTab('overview')" role="tab">Overview</div>
+  <div class="tab" onclick="switchTab('agents')" role="tab">Agent Scorecards</div>
+  <div class="tab" onclick="switchTab('pipeline')" role="tab">Pipeline</div>
+  <div class="tab" onclick="switchTab('activity')" role="tab">Activity</div>
+  <div class="tab" onclick="switchTab('weekly')" role="tab">Weekly Rollup</div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<div id="section-overview" class="section active">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-icon">📥</div><div class="value">55</div><div class="label">New Leads</div></div>
+    <div class="kpi"><div class="kpi-icon">📞</div><div class="value">445</div><div class="label">Calls (7d)</div></div>
+    <div class="kpi alert"><div class="kpi-icon">⏰</div><div class="value">820</div><div class="label">Needs Follow-Up</div></div>
+    <div class="kpi"><div class="kpi-icon">📅</div><div class="value">47</div><div class="label">Appts Set</div></div>
+    <div class="kpi"><div class="kpi-icon">🏠</div><div class="value">58</div><div class="label">Showing Homes</div></div>
+    <div class="kpi"><div class="kpi-icon">📋</div><div class="value">26</div><div class="label">Listings</div></div>
+    <div class="kpi good"><div class="kpi-icon">✍️</div><div class="value">23</div><div class="label">Under Contract</div></div>
+    <div class="kpi"><div class="kpi-icon">🏆</div><div class="value">0</div><div class="label">Closed (Month)</div></div>
+  </div>
+
+  <!-- Funnel Visualization -->
+  <div class="section-header">Pipeline Funnel</div>
+  <div class="funnel">
+    <div class="funnel-row"><div class="funnel-label">Lead</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:10%">80</div></div></div>
+    <div class="funnel-row"><div class="funnel-label">Attempted Contact</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:100%">735</div></div></div>
+    <div class="funnel-row"><div class="funnel-label">Spoke</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:5%">0</div></div></div>
+    <div class="funnel-row"><div class="funnel-label">Appointment Set</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:6%">47</div></div></div>
+    <div class="funnel-row"><div class="funnel-label">Showing Homes</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:7%">58</div></div></div>
+    <div class="funnel-row"><div class="funnel-label">Submitting Offers</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:5%">8</div></div></div>
+    <div class="funnel-row"><div class="funnel-label">Listing Agreement</div><div class="funnel-bar-track"><div class="funnel-bar-fill amber" style="width:5%">7</div></div></div>
+    <div class="funnel-row"><div class="funnel-label">Active Listing</div><div class="funnel-bar-track"><div class="funnel-bar-fill amber" style="width:5%">19</div></div></div>
+    <div class="funnel-row"><div class="funnel-label">Under Contract</div><div class="funnel-bar-track"><div class="funnel-bar-fill green" style="width:5%">23</div></div></div>
+  </div>
+
+  <div class="section-header">Agent Comparison</div>
+  <div class="table-wrap scrollable">
+    <table>
+      <thead><tr>
+        <th>Agent</th><th>Total</th><th>New (7d)</th><th>Calls (7d)</th>
+        <th>Follow-Up</th><th>Appts</th><th>Showing</th><th>Listings</th>
+        <th>Under Contract</th><th>Tasks</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Ross Howatt</strong></td>
+          <td>504</td><td>1</td>
+          <td class="">6</td>
+          <td class="c-amber">53</td>
+          <td>0</td><td>6</td>
+          <td>7</td>
+          <td class="c-green fw-bold">1</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td><strong>Guillermo Bruce</strong></td>
+          <td>445</td><td>2</td>
+          <td class="c-red">2</td>
+          <td class="c-amber">66</td>
+          <td>7</td><td>18</td>
+          <td>5</td>
+          <td class="c-green fw-bold">1</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Miranda Frickenstein</strong></td>
+          <td>429</td><td>4</td>
+          <td class="c-green fw-bold">82</td>
+          <td class="c-red fw-bold">148</td>
+          <td>10</td><td>5</td>
+          <td>3</td>
+          <td class="c-green fw-bold">2</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Carson Moree</strong></td>
+          <td>358</td><td>6</td>
+          <td class="">32</td>
+          <td class="">17</td>
+          <td>0</td><td>2</td>
+          <td>0</td>
+          <td class="c-muted">0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Gala Suarez</strong></td>
+          <td>331</td><td>0</td>
+          <td class="c-red">3</td>
+          <td class="">36</td>
+          <td>0</td><td>4</td>
+          <td>0</td>
+          <td class="c-green fw-bold">3</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Megaen Sandifer</strong></td>
+          <td>298</td><td>3</td>
+          <td class="c-green fw-bold">68</td>
+          <td class="c-red fw-bold">110</td>
+          <td>2</td><td>4</td>
+          <td>3</td>
+          <td class="c-green fw-bold">4</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td><strong>Kylee Lawrence</strong></td>
+          <td>262</td><td>3</td>
+          <td class="">13</td>
+          <td class="c-red fw-bold">86</td>
+          <td>3</td><td>2</td>
+          <td>2</td>
+          <td class="c-green fw-bold">3</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Alanna O'Rourke</strong></td>
+          <td>188</td><td>2</td>
+          <td class="">23</td>
+          <td class="c-red fw-bold">87</td>
+          <td>1</td><td>0</td>
+          <td>0</td>
+          <td class="c-muted">0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Jeff Rankin</strong></td>
+          <td>153</td><td>0</td>
+          <td class="">25</td>
+          <td class="c-amber">41</td>
+          <td>1</td><td>0</td>
+          <td>1</td>
+          <td class="c-green fw-bold">2</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Bailey Donovan</strong></td>
+          <td>143</td><td>5</td>
+          <td class="">38</td>
+          <td class="c-amber">52</td>
+          <td>3</td><td>5</td>
+          <td>1</td>
+          <td class="c-muted">0</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td><strong>Ashley Huntington</strong></td>
+          <td>119</td><td>6</td>
+          <td class="">11</td>
+          <td class="">15</td>
+          <td>2</td><td>3</td>
+          <td>3</td>
+          <td class="c-green fw-bold">2</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Tania Hidalgo</strong></td>
+          <td>108</td><td>4</td>
+          <td class="c-green fw-bold">89</td>
+          <td class="c-amber">47</td>
+          <td>1</td><td>1</td>
+          <td>0</td>
+          <td class="c-muted">0</td>
+          <td>26</td>
+        </tr>
+        <tr>
+          <td><strong>Aaron Carn</strong></td>
+          <td>105</td><td>4</td>
+          <td class="">17</td>
+          <td class="">27</td>
+          <td>2</td><td>2</td>
+          <td>0</td>
+          <td class="c-green fw-bold">2</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Jamie Miller</strong></td>
+          <td>96</td><td>4</td>
+          <td class="">16</td>
+          <td class="">19</td>
+          <td>9</td><td>4</td>
+          <td>0</td>
+          <td class="c-green fw-bold">2</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Jacob Reimer</strong></td>
+          <td>45</td><td>3</td>
+          <td class="">17</td>
+          <td class="">8</td>
+          <td>3</td><td>2</td>
+          <td>0</td>
+          <td class="c-green fw-bold">1</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Marvin Davis</strong></td>
+          <td>28</td><td>7</td>
+          <td class="c-red">2</td>
+          <td class="">2</td>
+          <td>1</td><td>0</td>
+          <td>0</td>
+          <td class="c-muted">0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>Danielle Hixon</strong></td>
+          <td>3</td><td>0</td>
+          <td class="c-red">1</td>
+          <td class="">1</td>
+          <td>0</td><td>0</td>
+          <td>0</td>
+          <td class="c-muted">0</td>
+          <td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="section-agents" class="section">
+  <div class="filter-bar">
+    <input type="text" id="agentSearch" placeholder="🔍  Search agents..." oninput="filterAgents()">
+    <select id="agentSort" onchange="sortAgents()">
+      <option value="leads">Sort: Total Leads</option>
+      <option value="new">Sort: New This Week</option>
+      <option value="calls">Sort: Calls</option>
+      <option value="followup">Sort: Needs Follow-Up</option>
+      <option value="deals">Sort: Under Contract</option>
+    </select>
+  </div>
+  <div class="agent-grid" id="agentGrid">
+    <div class="agent-card" data-agent="ross howatt"
+         data-leads="504" data-new="1"
+         data-calls="6" data-followup="53"
+         data-deals="1" onclick="toggleDetail(8)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Ross Howatt</div>
+          <div class="agent-subtitle">504 leads &bull; <span class="c-red">At Risk</span></div>
+        </div>
+        <span class="badge badge-red">At Risk</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">1</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-amber">6 <span class="c-muted" style="font-weight:400;font-size:11px">(5↑ 1↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">53</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">6</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">7</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">1</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">1</span></div>
+      </div>
+      <div class="detail-panel" id="detail-8">
+        <div class="detail-section"><h4>Needs Follow-Up (53)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23957" target="_blank">Pat Harvey</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23865" target="_blank">Rajul Maheshwari</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23477" target="_blank">Jeff March</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22585" target="_blank">Leanne Rossi</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21793" target="_blank">Michael Bright</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21735" target="_blank">Sergey Aleksashenko</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Landing Page</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21494" target="_blank">Ingrid P</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">BoomTown</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21410" target="_blank">Margaret Cronin</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (1)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23957" target="_blank">Pat Harvey</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
+          <tr><td>Listing agreement?</td><td>2026-04-06</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="guillermo bruce"
+         data-leads="445" data-new="2"
+         data-calls="2" data-followup="66"
+         data-deals="1" onclick="toggleDetail(25)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Guillermo Bruce</div>
+          <div class="agent-subtitle">445 leads &bull; <span class="c-amber">Watch</span></div>
+        </div>
+        <span class="badge badge-amber">Watch</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-red">2 <span class="c-muted" style="font-weight:400;font-size:11px">(2↑ 0↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">66</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">7</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">18</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">5</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">1</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-25">
+        <div class="detail-section"><h4>Needs Follow-Up (66)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23984" target="_blank">Justin Mooney</a></td><td>Lead</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23965" target="_blank">Trey Love</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23293" target="_blank">Christine Hughes - Realtor</a></td><td>Lead</td><td><span class="badge badge-teal">REALTOR</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23170" target="_blank">Shivani Patel</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23086" target="_blank">Gregory Collins</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">luxurypresence.com</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22498" target="_blank">Caroline Robbins</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22450" target="_blank">Thomas Costello</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22320" target="_blank">David</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (2)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23984" target="_blank">Justin Mooney</a></td><td>Lead</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23965" target="_blank">Trey Love</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="miranda frickenstein"
+         data-leads="429" data-new="4"
+         data-calls="82" data-followup="148"
+         data-deals="2" onclick="toggleDetail(18)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Miranda Frickenstein</div>
+          <div class="agent-subtitle">429 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">4</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">82 <span class="c-muted" style="font-weight:400;font-size:11px">(70↑ 12↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-red">148</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">10</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">5</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-18">
+        <div class="detail-section"><h4>Needs Follow-Up (148)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23961" target="_blank">Capprice Kitchen</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23883" target="_blank">Carmella Combs</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23844" target="_blank">Steven Page</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23490" target="_blank">Jarob Fetters</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">SIGN_CALL</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23449" target="_blank">Esther Hernandez</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23446" target="_blank">Teresa Harmon</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23444" target="_blank">Alexis</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23378" target="_blank">McMahon Welsh</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (4)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23961" target="_blank">Capprice Kitchen</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23947" target="_blank">Jatin Arora</a></td><td>Nurture</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23943" target="_blank">Samantha Stoll</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23940" target="_blank">Katie Levitaf</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Newcomer Sign Call</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="carson moree"
+         data-leads="358" data-new="6"
+         data-calls="32" data-followup="17"
+         data-deals="0" onclick="toggleDetail(34)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Carson Moree</div>
+          <div class="agent-subtitle">358 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">6</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">32 <span class="c-muted" style="font-weight:400;font-size:11px">(22↑ 10↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">17</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-34">
+        <div class="detail-section"><h4>Needs Follow-Up (17)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23973" target="_blank">Thomas Frazzetto</a></td><td>Lead</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23841" target="_blank">Emma Zimmerman</a></td><td>Lead</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23835" target="_blank">James Doucet</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23776" target="_blank">Loriann.e</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23520" target="_blank">Joe</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23519" target="_blank">Zinaida261972</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23513" target="_blank">Rizwana Hussain</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23471" target="_blank">Laura Inman</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (6)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23979" target="_blank">Mark Matreale</a></td><td>Met with Customer</td><td><span class="badge badge-teal">Newcomer Sign Call</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23973" target="_blank">Thomas Frazzetto</a></td><td>Lead</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23962" target="_blank">Joseph George</a></td><td>Nurture</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23948" target="_blank">Ashwin J</a></td><td>Submitting Offers</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23907" target="_blank">Mike</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23898" target="_blank">Iain</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="gala suarez"
+         data-leads="331" data-new="0"
+         data-calls="3" data-followup="36"
+         data-deals="3" onclick="toggleDetail(9)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Gala Suarez</div>
+          <div class="agent-subtitle">331 leads &bull; <span class="c-amber">Watch</span></div>
+        </div>
+        <span class="badge badge-amber">Watch</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-red">3 <span class="c-muted" style="font-weight:400;font-size:11px">(2↑ 1↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">36</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">4</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">3</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-9">
+        <div class="detail-section"><h4>Needs Follow-Up (36)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21635" target="_blank">David Vandygriff</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21531" target="_blank">Kevin LaRue</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21516" target="_blank">Sam Gallardo</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21416" target="_blank">Brandi Frazier</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21316" target="_blank">Kathleen Morales</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21165" target="_blank">Colby Esslinger Davenport</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">BoomTown</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/20958" target="_blank">Christina Reinhard</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/20915" target="_blank">William Creel</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="megaen sandifer"
+         data-leads="298" data-new="3"
+         data-calls="68" data-followup="110"
+         data-deals="4" onclick="toggleDetail(20)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Megaen Sandifer</div>
+          <div class="agent-subtitle">298 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">68 <span class="c-muted" style="font-weight:400;font-size:11px">(47↑ 21↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-red">110</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">4</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">4</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">2</span></div>
+      </div>
+      <div class="detail-panel" id="detail-20">
+        <div class="detail-section"><h4>Needs Follow-Up (110)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23955" target="_blank">Vs</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22540" target="_blank">Garvin Thorson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22525" target="_blank">Jeff Damus</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22495" target="_blank">Lisa Jordan</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22393" target="_blank">Carmen Pizzo</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22344" target="_blank">Sharmila Somrah</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22048" target="_blank">Coral Elsman</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21931" target="_blank">Kyla Moravec</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">PERSONALTRANSACTION</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (3)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23989" target="_blank">Kate Kleinhans</a></td><td>Met with Customer</td><td><span class="badge badge-teal">WALKIN</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23978" target="_blank">Guy Allsup</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23955" target="_blank">Vs</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
+          <tr><td>check in</td><td>2026-04-08</td></tr>
+          <tr><td>Reach back out about home process/ did kid get accepted!</td><td>2026-04-06</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="kylee lawrence"
+         data-leads="262" data-new="3"
+         data-calls="13" data-followup="86"
+         data-deals="3" onclick="toggleDetail(17)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Kylee Lawrence</div>
+          <div class="agent-subtitle">262 leads &bull; <span class="c-amber">Watch</span></div>
+        </div>
+        <span class="badge badge-amber">Watch</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-amber">13 <span class="c-muted" style="font-weight:400;font-size:11px">(7↑ 6↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-red">86</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">3</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-17">
+        <div class="detail-section"><h4>Needs Follow-Up (86)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23838" target="_blank">R Palande R Palande</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23826" target="_blank">Ramiro Alvarez</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23350" target="_blank">Eleanor Green</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">luxurypresence.com</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22606" target="_blank">Larry Mcshane</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22397" target="_blank">Joseph Dinis</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22186" target="_blank">Patrick McGee</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22118" target="_blank">William Harpster</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Luxury Presence</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22111" target="_blank">Traci McClung</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (3)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23974" target="_blank">Michael Paul Sumagpao</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23972" target="_blank">Jeff Marks</a></td><td>Nurture</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23892" target="_blank">Marvin Washington</a></td><td>Nurture</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="alanna o'rourke"
+         data-leads="188" data-new="2"
+         data-calls="23" data-followup="87"
+         data-deals="0" onclick="toggleDetail(29)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Alanna O'Rourke</div>
+          <div class="agent-subtitle">188 leads &bull; <span class="c-amber">Watch</span></div>
+        </div>
+        <span class="badge badge-amber">Watch</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">23 <span class="c-muted" style="font-weight:400;font-size:11px">(21↑ 2↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-red">87</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">1</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-29">
+        <div class="detail-section"><h4>Needs Follow-Up (87)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23976" target="_blank">Serenity Stevens</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23102" target="_blank">Gabe Smith</a></td><td>Lead</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22541" target="_blank">Tom Hartmann</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">REFERRALEXCHANGE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22523" target="_blank">Virgina Lanou</a></td><td>Lead</td><td><span class="badge badge-teal">OPENHOUSE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22513" target="_blank">Shantisha</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22229" target="_blank">Unknown Unknown</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Newcomer Sign Call</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21505" target="_blank">Sheryl Alexander - Trustee</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Homes.com</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21484" target="_blank">Sheila Matters</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Homes.com</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (2)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23976" target="_blank">Serenity Stevens</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23896" target="_blank">Christian</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="jeff rankin"
+         data-leads="153" data-new="0"
+         data-calls="25" data-followup="41"
+         data-deals="2" onclick="toggleDetail(24)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Jeff Rankin</div>
+          <div class="agent-subtitle">153 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">25 <span class="c-muted" style="font-weight:400;font-size:11px">(10↑ 15↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">41</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">1</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">1</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-24">
+        <div class="detail-section"><h4>Needs Follow-Up (41)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23833" target="_blank">David Ricci</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22542" target="_blank">Natalie Federico</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Homes.com</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22225" target="_blank">Donna Larson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22209" target="_blank">Debbie Bailey</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22194" target="_blank">Belinda Spradlin</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22192" target="_blank">Richard Doucette</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22191" target="_blank">Eric Thompson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22185" target="_blank">Katherine Drew</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Landing Page</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="bailey donovan"
+         data-leads="143" data-new="5"
+         data-calls="38" data-followup="52"
+         data-deals="0" onclick="toggleDetail(12)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Bailey Donovan</div>
+          <div class="agent-subtitle">143 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">5</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">38 <span class="c-muted" style="font-weight:400;font-size:11px">(32↑ 6↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">52</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">5</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">1</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">1</span></div>
+      </div>
+      <div class="detail-panel" id="detail-12">
+        <div class="detail-section"><h4>Needs Follow-Up (52)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23967" target="_blank">Melissa Hernsndez</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23960" target="_blank">Todd Stermer</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23333" target="_blank">Yvette Seebach</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22566" target="_blank">Kwesi Coleman</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22392" target="_blank">Caitlyn D'Angelo</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22178" target="_blank">Hallie Johnston</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21337" target="_blank">Liz Skeels</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21307" target="_blank">Eugene Krug</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (5)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23985" target="_blank">Carly</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23968" target="_blank">Joanne Blankenship</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Newcomer Sign Call</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23967" target="_blank">Melissa Hernsndez</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23960" target="_blank">Todd Stermer</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23895" target="_blank">Brett Walker</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
+          <tr><td>Find a house in IL yet?</td><td>2026-04-06</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="ashley huntington"
+         data-leads="119" data-new="6"
+         data-calls="11" data-followup="15"
+         data-deals="2" onclick="toggleDetail(32)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Ashley Huntington</div>
+          <div class="agent-subtitle">119 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">6</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-amber">11 <span class="c-muted" style="font-weight:400;font-size:11px">(6↑ 5↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">15</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-32">
+        <div class="detail-section"><h4>Needs Follow-Up (15)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23977" target="_blank">Carrie Blodgett</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23975" target="_blank">Adam Zona</a></td><td>Lead</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23854" target="_blank">Chad Smith</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23853" target="_blank">Emily Mannick</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23422" target="_blank">Jessica Mize</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23355" target="_blank">Jacob Bolton</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTREFERRAL</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23279" target="_blank">John Kenna</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23245" target="_blank">Fl Nikki Alphonse 2820 Oakland Green Cove Springs</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (6)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23980" target="_blank">Isaiah Jackson</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23977" target="_blank">Carrie Blodgett</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23975" target="_blank">Adam Zona</a></td><td>Lead</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23959" target="_blank">Pamela Chancy</a></td><td>Appointment Set</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23958" target="_blank">Eddie Gonzalez</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23944" target="_blank">Nancy Gladfelter</a></td><td>Met with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="tania hidalgo"
+         data-leads="108" data-new="4"
+         data-calls="89" data-followup="47"
+         data-deals="0" onclick="toggleDetail(30)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Tania Hidalgo</div>
+          <div class="agent-subtitle">108 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">4</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">89 <span class="c-muted" style="font-weight:400;font-size:11px">(84↑ 5↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">47</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">1</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">1</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">26</span></div>
+      </div>
+      <div class="detail-panel" id="detail-30">
+        <div class="detail-section"><h4>Needs Follow-Up (47)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23963" target="_blank">Melanie Donovan</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23840" target="_blank">Melody Johns</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21259" target="_blank">P Davis</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21053" target="_blank">Diane & David Boyd</a></td><td>Lead</td><td><span class="badge badge-teal">Fello File Import</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21040" target="_blank">Jeremy Mcintyre</a></td><td>Lead</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21037" target="_blank">Kent ONeil</a></td><td>Lead</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21031" target="_blank">Lacey Martin Abukuppeh</a></td><td>Lead</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21030" target="_blank">Samantha Johnson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (4)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23982" target="_blank">Martin</a></td><td>Nurture</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23963" target="_blank">Melanie Donovan</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23909" target="_blank">James</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23908" target="_blank">Takerea Holliman</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
+          <tr><td>Follow up</td><td>2026-04-03</td></tr>
+          <tr><td>Follow up</td><td>2026-04-03</td></tr>
+          <tr><td>Follow up</td><td>2026-04-04</td></tr>
+          <tr><td>Follow up</td><td>2026-04-03</td></tr>
+          <tr><td>Follow up</td><td>2026-04-03</td></tr>
+          <tr><td>Follow up</td><td>2026-04-04</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="aaron carn"
+         data-leads="105" data-new="4"
+         data-calls="17" data-followup="27"
+         data-deals="2" onclick="toggleDetail(28)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Aaron Carn</div>
+          <div class="agent-subtitle">105 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">4</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">17 <span class="c-muted" style="font-weight:400;font-size:11px">(9↑ 8↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">27</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-28">
+        <div class="detail-section"><h4>Needs Follow-Up (27)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23983" target="_blank">Martha Mary</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22297" target="_blank">Kerri Boatright</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21285" target="_blank">Tony White</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/20538" target="_blank">Lindsey Lebhar</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">ZCONNECT</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/20499" target="_blank">Joseph Lolley</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/20405" target="_blank">Emma Marcal</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/20370" target="_blank">Rob Hootselle</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">UNKNOWN</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/20364" target="_blank">Lina Kramer</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">ZCONNECT</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (4)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23983" target="_blank">Martha Mary</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23970" target="_blank">Catherine Jones</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23956" target="_blank">Holly McAlister</a></td><td>Met with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23946" target="_blank">Robert Belcaster</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="jamie miller"
+         data-leads="96" data-new="4"
+         data-calls="16" data-followup="19"
+         data-deals="2" onclick="toggleDetail(21)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Jamie Miller</div>
+          <div class="agent-subtitle">96 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">4</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">16 <span class="c-muted" style="font-weight:400;font-size:11px">(15↑ 1↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">19</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">9</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">4</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-21">
+        <div class="detail-section"><h4>Needs Follow-Up (19)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23981" target="_blank">Don B</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">BoomTown</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23850" target="_blank">Alan Coggan</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23428" target="_blank">Dwayne Murray</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23377" target="_blank">Mary Lowe</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23334" target="_blank">Harley Bogley</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23291" target="_blank">Fletcher Roberts</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23057" target="_blank">Tammi Parish</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/22373" target="_blank">Joseph Maguire</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (4)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23986" target="_blank">Ken Koehler</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23981" target="_blank">Don B</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">BoomTown</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23951" target="_blank">Monica Miranda</a></td><td>Met with Customer</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23950" target="_blank">Megan McGoff Borelli</a></td><td>Met with Customer</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="jacob reimer"
+         data-leads="45" data-new="3"
+         data-calls="17" data-followup="8"
+         data-deals="1" onclick="toggleDetail(31)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Jacob Reimer</div>
+          <div class="agent-subtitle">45 leads &bull; <span class="c-green">Strong</span></div>
+        </div>
+        <span class="badge badge-green">Strong</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">17 <span class="c-muted" style="font-weight:400;font-size:11px">(5↑ 12↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">8</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">3</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">2</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">1</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-31">
+        <div class="detail-section"><h4>Needs Follow-Up (8)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23453" target="_blank">Ana Kim</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23325" target="_blank">Catherine Rosal</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23303" target="_blank">Scott Moncreiff</a></td><td>Lead</td><td><span class="badge badge-teal">Homes.com</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/21919" target="_blank">Geo Metwin</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/16566" target="_blank">Julie Weller</a></td><td>Lead</td><td><span class="badge badge-teal">ZCONNECT</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/13477" target="_blank">Nick Zelaya</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/12606" target="_blank">Maria Zuluaga</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/8678" target="_blank">Ed Bayne</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (3)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23954" target="_blank">Dvonne Hernandez</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23942" target="_blank">Carla Javaruski</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23899" target="_blank">Kevin</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="marvin davis"
+         data-leads="28" data-new="7"
+         data-calls="2" data-followup="2"
+         data-deals="0" onclick="toggleDetail(35)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Marvin Davis</div>
+          <div class="agent-subtitle">28 leads &bull; <span class="c-amber">Watch</span></div>
+        </div>
+        <span class="badge badge-amber">Watch</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">7</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-red">2 <span class="c-muted" style="font-weight:400;font-size:11px">(0↑ 2↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">2</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">1</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-35">
+        <div class="detail-section"><h4>Needs Follow-Up (2)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23468" target="_blank">Teresa Austin</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23437" target="_blank">Tylor Johnson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
+        </table></div>
+        <div class="detail-section"><h4>New Leads This Week (7)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23964" target="_blank">Alisa Griffin</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23906" target="_blank">Gary</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23905" target="_blank">Nicole</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23904" target="_blank">Hunter</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23903" target="_blank">Chris</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+          <tr><td><a href="https://app.followupboss.com/people/23902" target="_blank">Michelle</a></td><td>Nurture</td><td><span class="badge badge-teal">IMPORT</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="agent-card" data-agent="danielle hixon"
+         data-leads="3" data-new="0"
+         data-calls="1" data-followup="1"
+         data-deals="0" onclick="toggleDetail(13)">
+      <div class="agent-card-header">
+        <div>
+          <div class="agent-name">Danielle Hixon</div>
+          <div class="agent-subtitle">3 leads &bull; <span class="c-red">At Risk</span></div>
+        </div>
+        <span class="badge badge-red">At Risk</span>
+      </div>
+      <div class="agent-card-body">
+        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-red">1 <span class="c-muted" style="font-weight:400;font-size:11px">(0↑ 1↓)</span></span></div>
+        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">1</span></div>
+        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
+        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
+        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
+      </div>
+      <div class="detail-panel" id="detail-13">
+        <div class="detail-section"><h4>Needs Follow-Up (1)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
+          <tr><td><a href="https://app.followupboss.com/people/20277" target="_blank">Kathryn Hennessy</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="section-pipeline" class="section">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-icon">📊</div><div class="value">351</div><div class="label">Active Deals</div></div>
+    <div class="kpi good"><div class="kpi-icon">✍️</div><div class="value">23</div><div class="label">Under Contract</div></div>
+    <div class="kpi"><div class="kpi-icon">🏆</div><div class="value">0</div><div class="label">Closed (Month)</div></div>
+    <div class="kpi"><div class="kpi-icon">📅</div><div class="value">47</div><div class="label">Appointments</div></div>
+    <div class="kpi"><div class="kpi-icon">🏠</div><div class="value">58</div><div class="label">Showing Homes</div></div>
+  </div>
+
+  <div class="section-header">Stage Funnel by Agent</div>
+  <div class="table-wrap scrollable">
+    <table>
+      <thead><tr>
+        <th>Agent</th><th>Lead</th><th>Attempted</th><th>Spoke</th>
+        <th>Appt Set</th><th>Showing</th><th>Submitting</th>
+        <th>Listing Agmt</th><th>Active Listing</th><th>Deals</th><th>UC</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Ross Howatt</strong></td>
+          <td>0</td><td>53</td>
+          <td>0</td><td>0</td>
+          <td>6</td><td>1</td>
+          <td>0</td><td>7</td>
+          <td>30</td><td class="c-green fw-bold">1</td>
+        </tr>
+        <tr>
+          <td><strong>Guillermo Bruce</strong></td>
+          <td>8</td><td>58</td>
+          <td>0</td><td>7</td>
+          <td>18</td><td>4</td>
+          <td>0</td><td>5</td>
+          <td>22</td><td class="c-green fw-bold">1</td>
+        </tr>
+        <tr>
+          <td><strong>Miranda Frickenstein</strong></td>
+          <td>0</td><td>148</td>
+          <td>0</td><td>10</td>
+          <td>5</td><td>0</td>
+          <td>2</td><td>1</td>
+          <td>70</td><td class="c-green fw-bold">2</td>
+        </tr>
+        <tr>
+          <td><strong>Carson Moree</strong></td>
+          <td>12</td><td>5</td>
+          <td>0</td><td>0</td>
+          <td>2</td><td>1</td>
+          <td>0</td><td>0</td>
+          <td>4</td><td class="c-green fw-bold">0</td>
+        </tr>
+        <tr>
+          <td><strong>Gala Suarez</strong></td>
+          <td>1</td><td>35</td>
+          <td>0</td><td>0</td>
+          <td>4</td><td>1</td>
+          <td>0</td><td>0</td>
+          <td>22</td><td class="c-green fw-bold">3</td>
+        </tr>
+        <tr>
+          <td><strong>Megaen Sandifer</strong></td>
+          <td>0</td><td>110</td>
+          <td>0</td><td>2</td>
+          <td>4</td><td>0</td>
+          <td>0</td><td>3</td>
+          <td>30</td><td class="c-green fw-bold">4</td>
+        </tr>
+        <tr>
+          <td><strong>Kylee Lawrence</strong></td>
+          <td>10</td><td>76</td>
+          <td>0</td><td>3</td>
+          <td>2</td><td>0</td>
+          <td>1</td><td>1</td>
+          <td>38</td><td class="c-green fw-bold">3</td>
+        </tr>
+        <tr>
+          <td><strong>Alanna O'Rourke</strong></td>
+          <td>7</td><td>80</td>
+          <td>0</td><td>1</td>
+          <td>0</td><td>0</td>
+          <td>0</td><td>0</td>
+          <td>1</td><td class="c-green fw-bold">0</td>
+        </tr>
+        <tr>
+          <td><strong>Jeff Rankin</strong></td>
+          <td>1</td><td>40</td>
+          <td>0</td><td>1</td>
+          <td>0</td><td>0</td>
+          <td>0</td><td>1</td>
+          <td>29</td><td class="c-green fw-bold">2</td>
+        </tr>
+        <tr>
+          <td><strong>Bailey Donovan</strong></td>
+          <td>2</td><td>50</td>
+          <td>0</td><td>3</td>
+          <td>5</td><td>1</td>
+          <td>1</td><td>0</td>
+          <td>23</td><td class="c-green fw-bold">0</td>
+        </tr>
+        <tr>
+          <td><strong>Ashley Huntington</strong></td>
+          <td>6</td><td>9</td>
+          <td>0</td><td>2</td>
+          <td>3</td><td>0</td>
+          <td>3</td><td>0</td>
+          <td>9</td><td class="c-green fw-bold">2</td>
+        </tr>
+        <tr>
+          <td><strong>Tania Hidalgo</strong></td>
+          <td>27</td><td>20</td>
+          <td>0</td><td>1</td>
+          <td>1</td><td>0</td>
+          <td>0</td><td>0</td>
+          <td>8</td><td class="c-green fw-bold">0</td>
+        </tr>
+        <tr>
+          <td><strong>Aaron Carn</strong></td>
+          <td>1</td><td>26</td>
+          <td>0</td><td>2</td>
+          <td>2</td><td>0</td>
+          <td>0</td><td>0</td>
+          <td>21</td><td class="c-green fw-bold">2</td>
+        </tr>
+        <tr>
+          <td><strong>Jamie Miller</strong></td>
+          <td>1</td><td>18</td>
+          <td>0</td><td>9</td>
+          <td>4</td><td>0</td>
+          <td>0</td><td>0</td>
+          <td>36</td><td class="c-green fw-bold">2</td>
+        </tr>
+        <tr>
+          <td><strong>Jacob Reimer</strong></td>
+          <td>4</td><td>4</td>
+          <td>0</td><td>3</td>
+          <td>2</td><td>0</td>
+          <td>0</td><td>0</td>
+          <td>3</td><td class="c-green fw-bold">1</td>
+        </tr>
+        <tr>
+          <td><strong>Marvin Davis</strong></td>
+          <td>0</td><td>2</td>
+          <td>0</td><td>1</td>
+          <td>0</td><td>0</td>
+          <td>0</td><td>0</td>
+          <td>0</td><td class="c-green fw-bold">0</td>
+        </tr>
+        <tr>
+          <td><strong>Danielle Hixon</strong></td>
+          <td>0</td><td>1</td>
+          <td>0</td><td>0</td>
+          <td>0</td><td>0</td>
+          <td>0</td><td>0</td>
+          <td>1</td><td class="c-green fw-bold">0</td>
+        </tr>
+      </tbody></table></div>
+
+  <div class="section-header">Under Contract Deals</div>
+  <div class="table-wrap scrollable">
+    <table>
+      <thead><tr><th>Agent</th><th>Deal</th><th>Stage</th><th>Created</th></tr></thead>
+      <tbody>
+        <tr><td>Ross Howatt</td><td>4365 Wood Haven Dr</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-05</td></tr>
+        <tr><td>Guillermo Bruce</td><td>John & Patricia Pelle</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-12</td></tr>
+        <tr><td>Miranda Frickenstein</td><td>Jutta Vogt</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-23</td></tr>
+        <tr><td>Gala Suarez</td><td>Bill & Amy Miller</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-25</td></tr>
+        <tr><td>Gala Suarez</td><td>Mary Joann Neligan</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-25</td></tr>
+        <tr><td>Gala Suarez</td><td>Jenny Leonidas</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-06</td></tr>
+        <tr><td>Megaen Sandifer</td><td>30 Tracker St</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-19</td></tr>
+        <tr><td>Megaen Sandifer</td><td>158 Hubbard Bnd</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-10</td></tr>
+        <tr><td>Megaen Sandifer</td><td>11160 Pine Estate Rd W</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-01</td></tr>
+        <tr><td>Kylee Lawrence</td><td>Hirshol Pheir and Charysse Levine</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-27</td></tr>
+        <tr><td>Kylee Lawrence</td><td>Josh Moore</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-26</td></tr>
+        <tr><td>Jeff Rankin</td><td>2124 Wood Stork Ave St. Augustine, FL 32084</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-30</td></tr>
+        <tr><td>Jeff Rankin</td><td>44 Wellstream Ln, Palm Coast, FL 32164</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-22</td></tr>
+        <tr><td>Ashley Huntington</td><td>2966 Swaps Ct, Green Cove Springs, FL 32043</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-23</td></tr>
+        <tr><td>Ashley Huntington</td><td>61 Foxhall Ln</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-17</td></tr>
+        <tr><td>Aaron Carn</td><td>107 Seasons Court</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-05</td></tr>
+        <tr><td>Aaron Carn</td><td>Dustin Shawn Diehl</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-15</td></tr>
+        <tr><td>Jamie Miller</td><td>Brett Johnson</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-28</td></tr>
+        <tr><td>Jamie Miller</td><td>Justin Murty</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-26</td></tr>
+        <tr><td>Jacob Reimer</td><td>Ryan Phillipi</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-25</td></tr>
+      </tbody></table></div>
+</div>
+
+<div id="section-activity" class="section">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-icon">📞</div><div class="value">445</div><div class="label">Total Calls</div></div>
+    <div class="kpi"><div class="kpi-icon">📥</div><div class="value">55</div><div class="label">New Leads</div></div>
+    <div class="kpi alert"><div class="kpi-icon">⏰</div><div class="value">820</div><div class="label">Overdue Follow-Ups</div></div>
+    <div class="kpi"><div class="kpi-icon">📋</div><div class="value">30</div><div class="label">Upcoming Tasks</div></div>
+  </div>
+
+  <div class="section-header">Call Activity by Agent</div>
+  <div class="table-wrap scrollable">
+    <table>
+      <thead><tr><th>Agent</th><th>Calls</th><th>Outbound</th><th>Inbound</th><th>Duration</th><th>Volume</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Tania Hidalgo</strong></td>
+          <td class="c-green fw-bold">89</td>
+          <td>84</td><td>5</td>
+          <td>42.9m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Miranda Frickenstein</strong></td>
+          <td class="c-green fw-bold">82</td>
+          <td>70</td><td>12</td>
+          <td>64.3m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:92%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Megaen Sandifer</strong></td>
+          <td class="c-green fw-bold">68</td>
+          <td>47</td><td>21</td>
+          <td>200.8m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:76%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Bailey Donovan</strong></td>
+          <td class="c-green fw-bold">38</td>
+          <td>32</td><td>6</td>
+          <td>39.2m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:42%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Carson Moree</strong></td>
+          <td class="c-green fw-bold">32</td>
+          <td>22</td><td>10</td>
+          <td>59.0m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:35%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Jeff Rankin</strong></td>
+          <td class="c-amber">25</td>
+          <td>10</td><td>15</td>
+          <td>54.2m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:28%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Alanna O'Rourke</strong></td>
+          <td class="c-amber">23</td>
+          <td>21</td><td>2</td>
+          <td>8.9m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:25%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Aaron Carn</strong></td>
+          <td class="c-amber">17</td>
+          <td>9</td><td>8</td>
+          <td>129.3m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:19%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Jacob Reimer</strong></td>
+          <td class="c-amber">17</td>
+          <td>5</td><td>12</td>
+          <td>57.0m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:19%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Jamie Miller</strong></td>
+          <td class="c-amber">16</td>
+          <td>15</td><td>1</td>
+          <td>2.7m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:17%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Kylee Lawrence</strong></td>
+          <td class="c-amber">13</td>
+          <td>7</td><td>6</td>
+          <td>24.9m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:14%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Ashley Huntington</strong></td>
+          <td class="c-amber">11</td>
+          <td>6</td><td>5</td>
+          <td>17.8m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:12%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Ross Howatt</strong></td>
+          <td class="c-red">6</td>
+          <td>5</td><td>1</td>
+          <td>21.2m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:6%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Gala Suarez</strong></td>
+          <td class="c-red">3</td>
+          <td>2</td><td>1</td>
+          <td>0.1m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:3%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Guillermo Bruce</strong></td>
+          <td class="c-red">2</td>
+          <td>2</td><td>0</td>
+          <td>0.6m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:2%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Marvin Davis</strong></td>
+          <td class="c-red">2</td>
+          <td>0</td><td>2</td>
+          <td>0.0m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:2%"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Danielle Hixon</strong></td>
+          <td class="c-red">1</td>
+          <td>0</td><td>1</td>
+          <td>0.0m</td>
+          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:1%"></div></div></div></td>
+        </tr>
+      </tbody></table></div>
+
+  <div class="section-header">New Leads by Agent</div>
+  <div class="table-wrap scrollable">
+    <table>
+      <thead><tr><th>Agent</th><th>New Leads</th><th>Lead Names</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Marvin Davis</strong></td><td>7</td><td style="font-size:12px">Alisa Griffin, Gary, Nicole, Hunter, Chris <span class="c-muted">+2 more</span></td></tr>
+        <tr><td><strong>Carson Moree</strong></td><td>6</td><td style="font-size:12px">Mark Matreale, Thomas Frazzetto, Joseph George, Ashwin J, Mike <span class="c-muted">+1 more</span></td></tr>
+        <tr><td><strong>Ashley Huntington</strong></td><td>6</td><td style="font-size:12px">Isaiah Jackson, Carrie Blodgett, Adam Zona, Pamela Chancy, Eddie Gonzalez <span class="c-muted">+1 more</span></td></tr>
+        <tr><td><strong>Bailey Donovan</strong></td><td>5</td><td style="font-size:12px">Carly, Joanne Blankenship, Melissa Hernsndez, Todd Stermer, Brett Walker</td></tr>
+        <tr><td><strong>Miranda Frickenstein</strong></td><td>4</td><td style="font-size:12px">Capprice Kitchen, Jatin Arora, Samantha Stoll, Katie Levitaf</td></tr>
+        <tr><td><strong>Tania Hidalgo</strong></td><td>4</td><td style="font-size:12px">Martin, Melanie Donovan, James, Takerea Holliman</td></tr>
+        <tr><td><strong>Aaron Carn</strong></td><td>4</td><td style="font-size:12px">Martha Mary, Catherine Jones, Holly McAlister, Robert Belcaster</td></tr>
+        <tr><td><strong>Jamie Miller</strong></td><td>4</td><td style="font-size:12px">Ken Koehler, Don B, Monica Miranda, Megan McGoff Borelli</td></tr>
+        <tr><td><strong>Megaen Sandifer</strong></td><td>3</td><td style="font-size:12px">Kate Kleinhans, Guy Allsup, Vs</td></tr>
+        <tr><td><strong>Kylee Lawrence</strong></td><td>3</td><td style="font-size:12px">Michael Paul Sumagpao, Jeff Marks, Marvin Washington</td></tr>
+        <tr><td><strong>Jacob Reimer</strong></td><td>3</td><td style="font-size:12px">Dvonne Hernandez, Carla Javaruski, Kevin</td></tr>
+        <tr><td><strong>Guillermo Bruce</strong></td><td>2</td><td style="font-size:12px">Justin Mooney, Trey Love</td></tr>
+        <tr><td><strong>Alanna O'Rourke</strong></td><td>2</td><td style="font-size:12px">Serenity Stevens, Christian</td></tr>
+        <tr><td><strong>Ross Howatt</strong></td><td>1</td><td style="font-size:12px">Pat Harvey</td></tr>
+      </tbody></table></div>
+</div>
+
+<div id="section-weekly" class="section">
+  <div class="rollup-card">
+    <h3>Week at a Glance</h3>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-icon">📥</div><div class="value">55</div><div class="label">New Leads</div></div>
+      <div class="kpi"><div class="kpi-icon">📞</div><div class="value">445</div><div class="label">Calls Made</div></div>
+      <div class="kpi"><div class="kpi-icon">📅</div><div class="value">47</div><div class="label">Appts Set</div></div>
+      <div class="kpi"><div class="kpi-icon">🏠</div><div class="value">58</div><div class="label">Showing</div></div>
+      <div class="kpi good"><div class="kpi-icon">✍️</div><div class="value">23</div><div class="label">Under Contract</div></div>
+      <div class="kpi"><div class="kpi-icon">🏆</div><div class="value">0</div><div class="label">Closed (Month)</div></div>
+    </div>
+  </div>
+
+  <div class="rollup-card">
+    <h3>Agent Performance Ranking</h3>
+    <div class="table-wrap scrollable" style="border:none;margin:0">
+      <table>
+        <thead><tr><th>#</th><th>Agent</th><th>Calls</th><th>New</th><th>Follow-Up</th><th>Appts</th><th>UC</th><th>Health</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>1</td><td><strong>Miranda Frickenstein</strong></td>
+            <td>82</td><td>4</td>
+            <td class="c-red">148</td>
+            <td>10</td>
+            <td class="c-green fw-bold">2</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>2</td><td><strong>Tania Hidalgo</strong></td>
+            <td>89</td><td>4</td>
+            <td class="c-amber">47</td>
+            <td>1</td>
+            <td class="c-green fw-bold">0</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>3</td><td><strong>Megaen Sandifer</strong></td>
+            <td>68</td><td>3</td>
+            <td class="c-red">110</td>
+            <td>2</td>
+            <td class="c-green fw-bold">4</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>4</td><td><strong>Jamie Miller</strong></td>
+            <td>16</td><td>4</td>
+            <td class="">19</td>
+            <td>9</td>
+            <td class="c-green fw-bold">2</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>5</td><td><strong>Bailey Donovan</strong></td>
+            <td>38</td><td>5</td>
+            <td class="c-amber">52</td>
+            <td>3</td>
+            <td class="c-green fw-bold">0</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>6</td><td><strong>Carson Moree</strong></td>
+            <td>32</td><td>6</td>
+            <td class="">17</td>
+            <td>0</td>
+            <td class="c-green fw-bold">0</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>7</td><td><strong>Jacob Reimer</strong></td>
+            <td>17</td><td>3</td>
+            <td class="">8</td>
+            <td>3</td>
+            <td class="c-green fw-bold">1</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>8</td><td><strong>Ashley Huntington</strong></td>
+            <td>11</td><td>6</td>
+            <td class="">15</td>
+            <td>2</td>
+            <td class="c-green fw-bold">2</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>9</td><td><strong>Aaron Carn</strong></td>
+            <td>17</td><td>4</td>
+            <td class="">27</td>
+            <td>2</td>
+            <td class="c-green fw-bold">2</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>10</td><td><strong>Jeff Rankin</strong></td>
+            <td>25</td><td>0</td>
+            <td class="c-amber">41</td>
+            <td>1</td>
+            <td class="c-green fw-bold">2</td>
+            <td><span class="badge badge-green">Strong</span></td>
+          </tr>
+          <tr>
+            <td>11</td><td><strong>Kylee Lawrence</strong></td>
+            <td>13</td><td>3</td>
+            <td class="c-red">86</td>
+            <td>3</td>
+            <td class="c-green fw-bold">3</td>
+            <td><span class="badge badge-amber">Watch</span></td>
+          </tr>
+          <tr>
+            <td>12</td><td><strong>Marvin Davis</strong></td>
+            <td>2</td><td>7</td>
+            <td class="">2</td>
+            <td>1</td>
+            <td class="c-green fw-bold">0</td>
+            <td><span class="badge badge-amber">Watch</span></td>
+          </tr>
+          <tr>
+            <td>13</td><td><strong>Guillermo Bruce</strong></td>
+            <td>2</td><td>2</td>
+            <td class="c-amber">66</td>
+            <td>7</td>
+            <td class="c-green fw-bold">1</td>
+            <td><span class="badge badge-amber">Watch</span></td>
+          </tr>
+          <tr>
+            <td>14</td><td><strong>Gala Suarez</strong></td>
+            <td>3</td><td>0</td>
+            <td class="">36</td>
+            <td>0</td>
+            <td class="c-green fw-bold">3</td>
+            <td><span class="badge badge-amber">Watch</span></td>
+          </tr>
+          <tr>
+            <td>15</td><td><strong>Alanna O'Rourke</strong></td>
+            <td>23</td><td>2</td>
+            <td class="c-red">87</td>
+            <td>1</td>
+            <td class="c-green fw-bold">0</td>
+            <td><span class="badge badge-amber">Watch</span></td>
+          </tr>
+          <tr>
+            <td>16</td><td><strong>Danielle Hixon</strong></td>
+            <td>1</td><td>0</td>
+            <td class="">1</td>
+            <td>0</td>
+            <td class="c-green fw-bold">0</td>
+            <td><span class="badge badge-red">At Risk</span></td>
+          </tr>
+          <tr>
+            <td>17</td><td><strong>Ross Howatt</strong></td>
+            <td>6</td><td>1</td>
+            <td class="c-amber">53</td>
+            <td>0</td>
+            <td class="c-green fw-bold">1</td>
+            <td><span class="badge badge-red">At Risk</span></td>
+          </tr>
+        </tbody></table></div>
+  </div>
+  <div class="rollup-card"><h3>Action Items for Leadership</h3>
+    <div class="action-item red"><span class="action-label c-red">Low Call Volume</span><span>Guillermo Bruce, Gala Suarez, Marvin Davis, Danielle Hixon — fewer than 5 calls this week. Coach on daily prospecting.</span></div>
+    <div class="action-item amber"><span class="action-label c-amber">High Overdue</span><span>Guillermo Bruce (66), Miranda Frickenstein (148), Megaen Sandifer (110), Kylee Lawrence (86), Alanna O'Rourke (87). Review smart lists and prioritize outreach.</span></div>
+    <div class="action-item blue"><span class="action-label c-teal">No New Leads</span><span>Gala Suarez, Jeff Rankin. Check lead routing and source activity.</span></div>
+    <div class="action-item green"><span class="action-label c-green">Under Contract</span><span>Ross Howatt (1), Guillermo Bruce (1), Miranda Frickenstein (2), Gala Suarez (3), Megaen Sandifer (4), Kylee Lawrence (3), Jeff Rankin (2), Ashley Huntington (2), Aaron Carn (2), Jamie Miller (2), Jacob Reimer (1). Verify TC handoff complete and deal cards in Sisu.</span></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  <img src="https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/1abc07f7-edce-49cb-b4ce-ec2cd52a4508" alt="TNG" onerror="this.style.display='none'"><br>
+  The Newcomer Group &bull; Leadership Command Center &bull; Auto-generated from Follow Up Boss
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleDetail(agentId) {
+  const panel = document.getElementById('detail-' + agentId);
+  if (panel) { panel.classList.toggle('open'); event.stopPropagation(); }
+}
+
+function filterAgents() {
+  const q = document.getElementById('agentSearch').value.toLowerCase();
+  document.querySelectorAll('.agent-card').forEach(card => {
+    card.style.display = (card.dataset.agent || '').includes(q) ? '' : 'none';
+  });
+}
+
+function sortAgents() {
+  const by = document.getElementById('agentSort').value;
+  const grid = document.getElementById('agentGrid');
+  const cards = Array.from(grid.children);
+  cards.sort((a, b) => parseInt(b.dataset[by] || 0) - parseInt(a.dataset[by] || 0));
+  cards.forEach(c => grid.appendChild(c));
+}
+</script>
+</body>
+</html>
