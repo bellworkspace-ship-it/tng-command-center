@@ -3,1788 +3,770 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TNG Command Center — April 06, 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>TNG Leadership Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
+  --bg-primary: #0a1628;
+  --bg-secondary: #0f1f3a;
+  --bg-card: #132240;
+  --bg-card-hover: #183058;
   --teal-dark: #076261;
   --teal: #119090;
   --teal-light: #1ab5b5;
-  --teal-glow: rgba(17,144,144,0.15);
-  --gold: #c9a84c;
-  --gold-light: #e8d48b;
-  --bg: #0a0f1a;
-  --bg-card: #111827;
-  --bg-card-hover: #1a2235;
-  --bg-surface: #0d1525;
-  --text: #e2e8f0;
-  --text-muted: #8892a4;
-  --text-dim: #4a5568;
-  --border: #1e2a3a;
-  --red: #ef4444;
-  --red-soft: rgba(239,68,68,0.15);
-  --amber: #f59e0b;
-  --amber-soft: rgba(245,158,11,0.15);
-  --green: #10b981;
-  --green-soft: rgba(16,185,129,0.15);
-  --blue: #3b82f6;
-  --blue-soft: rgba(59,130,246,0.15);
+  --teal-glow: rgba(26,181,181,0.15);
+  --navy: #1B3A5C;
+  --text-primary: #e8edf4;
+  --text-secondary: #8fa3bf;
+  --text-muted: #5a7090;
+  --green: #27AE60;
+  --amber: #E67E22;
+  --red: #C0392B;
+  --border: rgba(17,144,144,0.2);
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: 'Open Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-h1,h2,h3,h4 { font-family: 'Montserrat', sans-serif; }
-
-/* ── HEADER ── */
+body {
+  font-family:'Open Sans',sans-serif;
+  background:var(--bg-primary);
+  color:var(--text-primary);
+  min-height:100vh;
+}
 .header {
-  background: linear-gradient(135deg, #041c1c 0%, var(--teal-dark) 40%, #0a3d3d 100%);
-  padding: 0;
-  position: sticky; top: 0; z-index: 100;
-  border-bottom: 1px solid rgba(17,144,144,0.3);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+  background:linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  border-bottom:1px solid var(--border);
+  padding:20px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:16px;
 }
-.header-inner {
-  max-width: 1440px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 24px;
+.header-left {
+  display:flex;
+  align-items:center;
+  gap:16px;
 }
-.header-left { display: flex; align-items: center; gap: 20px; }
-.logo { height: 48px; filter: brightness(1.1); }
-.header-title { font-family: 'Montserrat', sans-serif; }
-.header-title h1 {
-  font-size: 20px; font-weight: 800; color: #fff;
-  letter-spacing: 0.5px; text-transform: uppercase;
+.header-logo {
+  height:48px;
+  border-radius:8px;
 }
-.header-title .subtitle {
-  font-size: 12px; color: var(--teal-light); font-weight: 500;
-  letter-spacing: 1px; text-transform: uppercase; margin-top: 2px;
+.header h1 {
+  font-family:'Montserrat',sans-serif;
+  font-size:1.5rem;
+  font-weight:700;
+  color:var(--teal-light);
+  letter-spacing:-0.5px;
 }
-.header-right { text-align: right; }
-.header-date { font-size: 12px; color: rgba(255,255,255,0.6); }
-.header-week { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-.live-dot {
-  display: inline-block; width: 8px; height: 8px; background: var(--green);
-  border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite;
+.header-sub {
+  font-size:0.85rem;
+  color:var(--text-secondary);
 }
-@keyframes pulse {
-  0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
-  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+.header-right {
+  text-align:right;
+  font-size:0.8rem;
+  color:var(--text-muted);
 }
-
-/* ── TABS ── */
 .tabs {
-  display: flex; gap: 0; background: var(--bg-surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px; overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  display:flex;
+  background:var(--bg-secondary);
+  border-bottom:1px solid var(--border);
+  padding:0 32px;
+  overflow-x:auto;
 }
 .tab {
-  padding: 14px 20px; cursor: pointer; font-family: 'Montserrat', sans-serif;
-  font-weight: 600; font-size: 12px; letter-spacing: 0.5px;
-  text-transform: uppercase; color: var(--text-muted);
-  border-bottom: 2px solid transparent; transition: all 0.25s;
-  white-space: nowrap; user-select: none;
+  padding:14px 24px;
+  cursor:pointer;
+  font-family:'Montserrat',sans-serif;
+  font-size:0.85rem;
+  font-weight:600;
+  color:var(--text-secondary);
+  border-bottom:3px solid transparent;
+  transition:all 0.2s;
+  white-space:nowrap;
 }
-.tab:hover { color: var(--teal-light); }
-.tab.active { color: var(--teal-light); border-bottom-color: var(--teal); }
+.tab:hover { color:var(--teal-light); }
+.tab.active {
+  color:var(--teal-light);
+  border-bottom-color:var(--teal-light);
+}
+.content { padding:24px 32px; max-width:1600px; margin:0 auto; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
 
-/* ── MAIN ── */
-.main { max-width: 1440px; margin: 0 auto; padding: 24px; }
-.section { display: none; }
-.section.active { display: block; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ── KPI CARDS ── */
+/* KPI Cards */
 .kpi-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px; margin-bottom: 28px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  gap:16px;
+  margin-bottom:28px;
 }
-.kpi {
-  background: var(--bg-card); border-radius: 16px; padding: 20px 16px;
-  border: 1px solid var(--border); text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-  position: relative; overflow: hidden;
+.kpi-card {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  text-align:center;
+  transition:transform 0.2s, box-shadow 0.2s;
 }
-.kpi:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-.kpi::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: var(--teal); border-radius: 16px 16px 0 0;
+.kpi-card:hover {
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
 }
-.kpi.alert::before { background: var(--red); }
-.kpi.warn::before { background: var(--amber); }
-.kpi.good::before { background: var(--green); }
-.kpi-icon { font-size: 24px; margin-bottom: 8px; }
-.kpi .value {
-  font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800;
-  background: linear-gradient(135deg, #fff 0%, var(--teal-light) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+.kpi-value {
+  font-family:'Montserrat',sans-serif;
+  font-size:2.2rem;
+  font-weight:800;
+  color:var(--teal-light);
+  line-height:1.1;
 }
-.kpi.alert .value {
-  background: linear-gradient(135deg, #fff 0%, var(--red) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.kpi.good .value {
-  background: linear-gradient(135deg, #fff 0%, var(--green) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.kpi .label {
-  font-size: 10px; color: var(--text-muted); margin-top: 6px;
-  text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+.kpi-label {
+  font-size:0.78rem;
+  color:var(--text-secondary);
+  margin-top:6px;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
-/* ── SECTION HEADER ── */
-.section-header {
-  font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 700;
-  color: #fff; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+/* Agent Table */
+.agent-table-wrap {
+  overflow-x:auto;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--bg-card);
 }
-.section-header::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+.agent-table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.85rem;
+}
+.agent-table th {
+  font-family:'Montserrat',sans-serif;
+  font-weight:600;
+  text-transform:uppercase;
+  font-size:0.72rem;
+  letter-spacing:1px;
+  color:var(--text-muted);
+  padding:14px 16px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+  background:var(--bg-secondary);
+  position:sticky;
+  top:0;
+}
+.agent-table td {
+  padding:12px 16px;
+  border-bottom:1px solid rgba(17,144,144,0.08);
+  vertical-align:middle;
+}
+.agent-table tr:hover td {
+  background:var(--bg-card-hover);
+}
+.health-badge {
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:0.72rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
 }
 
-/* ── TABLES ── */
-.table-wrap {
-  background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);
-  overflow: hidden; margin-bottom: 24px;
+/* Funnel */
+.funnel { margin:24px 0; }
+.funnel-row {
+  display:flex;
+  align-items:center;
+  margin:6px 0;
+  gap:12px;
 }
-.table-wrap.scrollable { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th {
-  text-align: left; padding: 14px 16px;
-  background: linear-gradient(135deg, var(--teal-dark) 0%, #0a4040 100%);
-  color: rgba(255,255,255,0.9); font-family: 'Montserrat', sans-serif;
-  font-weight: 600; font-size: 11px; text-transform: uppercase;
-  letter-spacing: 0.5px; white-space: nowrap;
+.funnel-label {
+  width:180px;
+  text-align:right;
+  font-size:0.82rem;
+  color:var(--text-secondary);
+  flex-shrink:0;
 }
-th:first-child { border-radius: 0; }
-td { padding: 12px 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
-tr:last-child td { border-bottom: none; }
-tr:hover { background: rgba(17,144,144,0.04); }
-a { color: var(--teal-light); text-decoration: none; transition: color 0.2s; }
-a:hover { color: #fff; }
+.funnel-bar-wrap {
+  flex:1;
+  background:rgba(17,144,144,0.08);
+  border-radius:6px;
+  height:32px;
+  position:relative;
+  overflow:hidden;
+}
+.funnel-bar {
+  height:100%;
+  border-radius:6px;
+  background:linear-gradient(90deg, var(--teal-dark), var(--teal-light));
+  transition:width 0.6s ease;
+  display:flex;
+  align-items:center;
+  padding-left:12px;
+  min-width:fit-content;
+}
+.funnel-count {
+  font-family:'Montserrat',sans-serif;
+  font-weight:700;
+  font-size:0.82rem;
+  color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,0.4);
+}
 
-/* ── BARS ── */
-.bar-cell { display: flex; align-items: center; gap: 10px; }
-.bar-track { flex:1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; min-width: 60px; }
-.bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
-.bar-fill.teal { background: linear-gradient(90deg, var(--teal-dark), var(--teal-light)); }
-.bar-fill.green { background: linear-gradient(90deg, #065f46, var(--green)); }
-.bar-fill.red { background: linear-gradient(90deg, #7f1d1d, var(--red)); }
-.bar-fill.amber { background: linear-gradient(90deg, #78350f, var(--amber)); }
+/* Agent Scorecards */
+.scorecard-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(380px, 1fr));
+  gap:20px;
+}
+.scorecard {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  transition:box-shadow 0.2s;
+}
+.scorecard:hover { box-shadow:var(--shadow); }
+.scorecard-header {
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  border-bottom:1px solid var(--border);
+}
+.scorecard-name {
+  font-family:'Montserrat',sans-serif;
+  font-weight:700;
+  font-size:1rem;
+}
+.scorecard-score {
+  font-family:'Montserrat',sans-serif;
+  font-weight:800;
+  font-size:1.4rem;
+}
+.scorecard-body {
+  padding:16px 20px;
+  display:none;
+}
+.scorecard.open .scorecard-body { display:block; }
+.sc-stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+.sc-stat {
+  text-align:center;
+  padding:10px;
+  background:var(--bg-secondary);
+  border-radius:8px;
+}
+.sc-stat-val {
+  font-family:'Montserrat',sans-serif;
+  font-weight:700;
+  font-size:1.2rem;
+  color:var(--teal-light);
+}
+.sc-stat-label {
+  font-size:0.7rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  margin-top:2px;
+}
+.stuck-list { margin-top:12px; }
+.stuck-item {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 12px;
+  background:var(--bg-secondary);
+  border-radius:6px;
+  margin:4px 0;
+  font-size:0.82rem;
+}
+.stuck-days {
+  font-weight:700;
+  color:var(--red);
+}
 
-/* ── BADGES ── */
-.badge {
-  display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+/* Activity bars */
+.bar-chart {
+  display:flex;
+  align-items:flex-end;
+  gap:12px;
+  height:200px;
+  padding:20px 0;
 }
-.badge-teal { background: var(--teal-glow); color: var(--teal-light); }
-.badge-green { background: var(--green-soft); color: var(--green); }
-.badge-red { background: var(--red-soft); color: var(--red); }
-.badge-amber { background: var(--amber-soft); color: var(--amber); }
-.badge-blue { background: var(--blue-soft); color: var(--blue); }
-.badge-gold { background: rgba(201,168,76,0.15); color: var(--gold); }
+.bar-col {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.bar {
+  width:100%;
+  max-width:60px;
+  background:linear-gradient(180deg, var(--teal-light), var(--teal-dark));
+  border-radius:6px 6px 0 0;
+  transition:height 0.6s ease;
+  min-height:4px;
+}
+.bar-label {
+  font-size:0.68rem;
+  color:var(--text-muted);
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  max-height:80px;
+  overflow:hidden;
+}
+.bar-value {
+  font-family:'Montserrat',sans-serif;
+  font-weight:700;
+  font-size:0.75rem;
+  color:var(--teal-light);
+}
 
-/* ── METRIC COLORS ── */
-.c-red { color: var(--red); }
-.c-amber { color: var(--amber); }
-.c-green { color: var(--green); }
-.c-teal { color: var(--teal-light); }
-.c-muted { color: var(--text-muted); }
-.fw-bold { font-weight: 700; }
+/* UC Deals list */
+.deal-list { margin-top:16px; }
+.deal-item {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  margin:6px 0;
+}
+.deal-name {
+  font-weight:600;
+  color:var(--text-primary);
+}
+.deal-agent {
+  font-size:0.8rem;
+  color:var(--text-secondary);
+}
+.deal-value {
+  font-family:'Montserrat',sans-serif;
+  font-weight:700;
+  color:var(--green);
+}
 
-/* ── AGENT CARDS ── */
-.agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
-.agent-card {
-  background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);
-  overflow: hidden; cursor: pointer; transition: all 0.25s;
+/* Weekly Rollup */
+.ranking-table {
+  width:100%;
+  border-collapse:collapse;
 }
-.agent-card:hover { border-color: var(--teal); box-shadow: 0 0 20px rgba(17,144,144,0.1); transform: translateY(-2px); }
-.agent-card-header {
-  padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
-  background: linear-gradient(135deg, rgba(17,144,144,0.08) 0%, transparent 100%);
-  border-bottom: 1px solid var(--border);
+.ranking-table th {
+  font-family:'Montserrat',sans-serif;
+  font-weight:600;
+  font-size:0.72rem;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--text-muted);
+  padding:12px 16px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
 }
-.agent-name { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; color: #fff; }
-.agent-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-.agent-card-body { padding: 16px 20px; }
-.metric-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 0; border-bottom: 1px solid rgba(30,42,58,0.5); font-size: 13px;
+.ranking-table td {
+  padding:10px 16px;
+  border-bottom:1px solid rgba(17,144,144,0.08);
 }
-.metric-row:last-child { border-bottom: none; }
-.metric-label { color: var(--text-muted); font-size: 12px; }
-.metric-value { font-weight: 700; font-family: 'Montserrat', sans-serif; }
+.rank-num {
+  font-family:'Montserrat',sans-serif;
+  font-weight:800;
+  color:var(--teal-light);
+}
 
-/* ── DETAIL PANEL ── */
-.detail-panel {
-  display: none; border-top: 1px solid var(--border);
-  padding: 16px 20px; background: rgba(0,0,0,0.15);
-}
-.detail-panel.open { display: block; animation: fadeIn 0.2s ease; }
-.detail-section { margin-bottom: 16px; }
-.detail-section h4 {
-  font-size: 12px; font-weight: 700; color: var(--teal-light);
-  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
-}
-.detail-section table th { padding: 8px 12px; font-size: 10px; }
-.detail-section table td { padding: 8px 12px; font-size: 12px; }
-
-/* ── FILTER BAR ── */
-.filter-bar {
-  display: flex; gap: 12px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;
-}
-.filter-bar input, .filter-bar select {
-  padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 10px; color: var(--text); font-size: 13px;
-  font-family: 'Open Sans', sans-serif; outline: none; transition: border-color 0.2s;
-}
-.filter-bar input:focus, .filter-bar select:focus { border-color: var(--teal); }
-.filter-bar input { width: 220px; }
-.filter-bar select { cursor: pointer; }
-
-/* ── ROLLUP ── */
-.rollup-card {
-  background: var(--bg-card); border-radius: 16px; padding: 24px;
-  border: 1px solid var(--border); margin-bottom: 20px;
-}
-.rollup-card h3 {
-  font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700;
-  color: #fff; margin-bottom: 16px;
-}
+/* Action items */
+.action-list { margin-top:16px; }
 .action-item {
-  padding: 12px 16px; border-radius: 10px; margin-bottom: 8px;
-  font-size: 13px; line-height: 1.6; display: flex; gap: 12px; align-items: flex-start;
+  padding:14px 18px;
+  background:var(--bg-card);
+  border-left:4px solid var(--teal);
+  border-radius:0 8px 8px 0;
+  margin:8px 0;
+  font-size:0.88rem;
 }
-.action-item.red { background: var(--red-soft); border-left: 3px solid var(--red); }
-.action-item.amber { background: var(--amber-soft); border-left: 3px solid var(--amber); }
-.action-item.green { background: var(--green-soft); border-left: 3px solid var(--green); }
-.action-item.blue { background: var(--blue-soft); border-left: 3px solid var(--blue); }
-.action-label { font-weight: 700; white-space: nowrap; }
-
-/* ── MINI CHART (CSS-based) ── */
-.sparkbar { display: flex; gap: 2px; align-items: flex-end; height: 32px; }
-.sparkbar-segment {
-  width: 6px; border-radius: 2px; background: var(--teal);
-  transition: height 0.4s ease;
+.action-item.urgent {
+  border-left-color:var(--red);
+}
+.action-item.warning {
+  border-left-color:var(--amber);
 }
 
-/* ── FUNNEL VIZ ── */
-.funnel { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; }
-.funnel-row { display: flex; align-items: center; gap: 12px; }
-.funnel-label { width: 130px; text-align: right; font-size: 12px; color: var(--text-muted); font-weight: 600; }
-.funnel-bar-track { flex: 1; height: 28px; background: var(--border); border-radius: 6px; overflow: hidden; position: relative; }
-.funnel-bar-fill {
-  height: 100%; border-radius: 6px; display: flex; align-items: center;
-  padding: 0 12px; font-size: 12px; font-weight: 700; color: #fff;
-  transition: width 0.8s ease; min-width: 40px;
+/* Section titles */
+.section-title {
+  font-family:'Montserrat',sans-serif;
+  font-size:1.1rem;
+  font-weight:700;
+  color:var(--text-primary);
+  margin:28px 0 16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
-.funnel-bar-fill.teal { background: linear-gradient(90deg, var(--teal-dark), var(--teal-light)); }
-.funnel-bar-fill.green { background: linear-gradient(90deg, #065f46, var(--green)); }
-.funnel-bar-fill.amber { background: linear-gradient(90deg, #78350f, var(--amber)); }
-
-/* ── MOBILE ── */
-@media (max-width: 768px) {
-  .header-inner { flex-direction: column; gap: 10px; text-align: center; }
-  .header-right { text-align: center; }
-  .header-title h1 { font-size: 16px; }
-  .logo { height: 36px; }
-  .tabs { padding: 0 12px; }
-  .tab { padding: 12px 14px; font-size: 11px; }
-  .main { padding: 16px; }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .kpi { padding: 14px 10px; }
-  .kpi .value { font-size: 24px; }
-  .kpi .label { font-size: 9px; }
-  .agent-grid { grid-template-columns: 1fr; }
-  .table-wrap { border-radius: 12px; }
-  .table-wrap.scrollable { -webkit-overflow-scrolling: touch; }
-  table { font-size: 12px; }
-  th, td { padding: 10px 10px; }
-  .filter-bar input { width: 100%; }
-  .filter-bar { flex-direction: column; }
-  .funnel-label { width: 90px; font-size: 11px; }
-  .bar-track { min-width: 40px; }
-  .section-header { font-size: 14px; }
-}
-@media (max-width: 480px) {
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .kpi .value { font-size: 22px; }
-  .header-title h1 { font-size: 14px; }
-  .tab { padding: 10px 10px; font-size: 10px; }
+.section-title::before {
+  content:'';
+  width:4px;
+  height:20px;
+  background:var(--teal-light);
+  border-radius:2px;
 }
 
-/* ── FOOTER ── */
-.footer {
-  text-align: center; padding: 30px; color: var(--text-dim);
-  font-size: 11px; border-top: 1px solid var(--border); margin-top: 40px;
+/* Search/Filter */
+.controls {
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
 }
-.footer img { height: 24px; opacity: 0.3; margin-bottom: 8px; }
+.search-input {
+  background:var(--bg-secondary);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 16px;
+  color:var(--text-primary);
+  font-size:0.85rem;
+  outline:none;
+  width:280px;
+}
+.search-input:focus { border-color:var(--teal-light); }
+.sort-select {
+  background:var(--bg-secondary);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 16px;
+  color:var(--text-primary);
+  font-size:0.85rem;
+  outline:none;
+  cursor:pointer;
+}
+
+/* Mobile */
+@media(max-width:768px) {
+  .header { padding:16px; }
+  .header h1 { font-size:1.2rem; }
+  .content { padding:16px; }
+  .tabs { padding:0 16px; }
+  .tab { padding:12px 16px; font-size:0.78rem; }
+  .kpi-grid { grid-template-columns:repeat(2,1fr); }
+  .scorecard-grid { grid-template-columns:1fr; }
+  .funnel-label { width:120px; font-size:0.72rem; }
+  .sc-stats { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:480px) {
+  .kpi-grid { grid-template-columns:1fr; }
+  .kpi-value { font-size:1.8rem; }
+  .header-logo { height:36px; }
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-inner">
-    <div class="header-left">
-      <img src="https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/1abc07f7-edce-49cb-b4ce-ec2cd52a4508" alt="The Newcomer Group" class="logo"
-           onerror="this.style.display='none'">
-      <div class="header-title">
-        <h1>Leadership Command Center</h1>
-        <div class="subtitle">Agent Performance &amp; Pipeline Intelligence</div>
-      </div>
+  <div class="header-left">
+    <img class="header-logo" src="https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/1abc07f7-edce-49cb-b4ce-ec2cd52a4508" alt="TNG Logo" onerror="this.style.display='none'">
+    <div>
+      <h1>Leadership Command Center</h1>
+      <div class="header-sub">The Newcomer Group &mdash; Daily Operations Dashboard</div>
     </div>
-    <div class="header-right">
-      <div class="header-date">
-        <span class="live-dot"></span>
-        Monday, April 06, 2026
-      </div>
-      <div class="header-week">
-        Week of Apr 06 — Apr 12 &bull; 18 Agents
-      </div>
-    </div>
+  </div>
+  <div class="header-right">
+    <div id="dateDisplay"></div>
+    <div id="dataRange" style="margin-top:4px;"></div>
   </div>
 </div>
 
-<div class="tabs" role="tablist">
-  <div class="tab active" onclick="switchTab('overview')" role="tab">Overview</div>
-  <div class="tab" onclick="switchTab('agents')" role="tab">Agent Scorecards</div>
-  <div class="tab" onclick="switchTab('pipeline')" role="tab">Pipeline</div>
-  <div class="tab" onclick="switchTab('activity')" role="tab">Activity</div>
-  <div class="tab" onclick="switchTab('weekly')" role="tab">Weekly Rollup</div>
+<div class="tabs" id="tabBar">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="scorecards">Agent Scorecards</div>
+  <div class="tab" data-tab="pipeline">Pipeline</div>
+  <div class="tab" data-tab="activity">Activity</div>
+  <div class="tab" data-tab="rollup">Weekly Rollup</div>
 </div>
 
-<div class="main">
-
-<!-- ═══════════ OVERVIEW ═══════════ -->
-<div id="section-overview" class="section active">
-  <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-icon">📥</div><div class="value">43</div><div class="label">New Leads</div></div>
-    <div class="kpi"><div class="kpi-icon">📞</div><div class="value">415</div><div class="label">Calls (7d)</div></div>
-    <div class="kpi alert"><div class="kpi-icon">⏰</div><div class="value">797</div><div class="label">Needs Follow-Up</div></div>
-    <div class="kpi"><div class="kpi-icon">📅</div><div class="value">44</div><div class="label">Appts Set</div></div>
-    <div class="kpi"><div class="kpi-icon">🏠</div><div class="value">61</div><div class="label">Showing Homes</div></div>
-    <div class="kpi"><div class="kpi-icon">📋</div><div class="value">24</div><div class="label">Listings</div></div>
-    <div class="kpi good"><div class="kpi-icon">✍️</div><div class="value">26</div><div class="label">Under Contract</div></div>
-    <div class="kpi"><div class="kpi-icon">🏆</div><div class="value">0</div><div class="label">Closed (Month)</div></div>
-  </div>
-
-  <!-- Funnel Visualization -->
-  <div class="section-header">Pipeline Funnel</div>
-  <div class="funnel">
-    <div class="funnel-row"><div class="funnel-label">Lead</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:9%">69</div></div></div>
-    <div class="funnel-row"><div class="funnel-label">Attempted Contact</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:100%">728</div></div></div>
-    <div class="funnel-row"><div class="funnel-label">Spoke</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:5%">0</div></div></div>
-    <div class="funnel-row"><div class="funnel-label">Appointment Set</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:6%">44</div></div></div>
-    <div class="funnel-row"><div class="funnel-label">Showing Homes</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:8%">61</div></div></div>
-    <div class="funnel-row"><div class="funnel-label">Submitting Offers</div><div class="funnel-bar-track"><div class="funnel-bar-fill teal" style="width:5%">7</div></div></div>
-    <div class="funnel-row"><div class="funnel-label">Listing Agreement</div><div class="funnel-bar-track"><div class="funnel-bar-fill amber" style="width:5%">6</div></div></div>
-    <div class="funnel-row"><div class="funnel-label">Active Listing</div><div class="funnel-bar-track"><div class="funnel-bar-fill amber" style="width:5%">18</div></div></div>
-    <div class="funnel-row"><div class="funnel-label">Under Contract</div><div class="funnel-bar-track"><div class="funnel-bar-fill green" style="width:5%">26</div></div></div>
-  </div>
-
-  <div class="section-header">Agent Comparison</div>
-  <div class="table-wrap scrollable">
-    <table>
-      <thead><tr>
-        <th>Agent</th><th>Total</th><th>New (7d)</th><th>Calls (7d)</th>
-        <th>Follow-Up</th><th>Appts</th><th>Showing</th><th>Listings</th>
-        <th>Under Contract</th><th>Tasks</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Ross Howatt</strong></td>
-          <td>504</td><td>1</td>
-          <td class="">8</td>
-          <td class="c-amber">53</td>
-          <td>0</td><td>6</td>
-          <td>6</td>
-          <td class="c-green fw-bold">2</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td><strong>Guillermo Bruce</strong></td>
-          <td>445</td><td>2</td>
-          <td class="c-red">1</td>
-          <td class="c-amber">66</td>
-          <td>7</td><td>18</td>
-          <td>5</td>
-          <td class="c-green fw-bold">1</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Miranda Frickenstein</strong></td>
-          <td>427</td><td>0</td>
-          <td class="c-green fw-bold">70</td>
-          <td class="c-red fw-bold">146</td>
-          <td>9</td><td>6</td>
-          <td>3</td>
-          <td class="c-green fw-bold">2</td>
-          <td>3</td>
-        </tr>
-        <tr>
-          <td><strong>Carson Moree</strong></td>
-          <td>361</td><td>5</td>
-          <td class="">28</td>
-          <td class="">17</td>
-          <td>0</td><td>2</td>
-          <td>0</td>
-          <td class="c-muted">0</td>
-          <td>2</td>
-        </tr>
-        <tr>
-          <td><strong>Gala Suarez</strong></td>
-          <td>331</td><td>0</td>
-          <td class="c-red">4</td>
-          <td class="">36</td>
-          <td>0</td><td>4</td>
-          <td>0</td>
-          <td class="c-green fw-bold">3</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Megaen Sandifer</strong></td>
-          <td>299</td><td>4</td>
-          <td class="c-green fw-bold">62</td>
-          <td class="c-red fw-bold">110</td>
-          <td>2</td><td>4</td>
-          <td>3</td>
-          <td class="c-green fw-bold">4</td>
-          <td>3</td>
-        </tr>
-        <tr>
-          <td><strong>Kylee Lawrence</strong></td>
-          <td>265</td><td>5</td>
-          <td class="">20</td>
-          <td class="c-red fw-bold">85</td>
-          <td>3</td><td>4</td>
-          <td>2</td>
-          <td class="c-green fw-bold">3</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td><strong>Alanna O'Rourke</strong></td>
-          <td>188</td><td>1</td>
-          <td class="">23</td>
-          <td class="c-red fw-bold">86</td>
-          <td>1</td><td>0</td>
-          <td>0</td>
-          <td class="c-muted">0</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Jeff Rankin</strong></td>
-          <td>153</td><td>0</td>
-          <td class="">24</td>
-          <td class="c-amber">41</td>
-          <td>1</td><td>0</td>
-          <td>1</td>
-          <td class="c-green fw-bold">2</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Bailey Donovan</strong></td>
-          <td>143</td><td>4</td>
-          <td class="">34</td>
-          <td class="c-amber">52</td>
-          <td>2</td><td>7</td>
-          <td>1</td>
-          <td class="c-muted">0</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td><strong>Ashley Huntington</strong></td>
-          <td>121</td><td>7</td>
-          <td class="">9</td>
-          <td class="">17</td>
-          <td>2</td><td>2</td>
-          <td>3</td>
-          <td class="c-green fw-bold">3</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Tania Hidalgo</strong></td>
-          <td>110</td><td>5</td>
-          <td class="c-green fw-bold">82</td>
-          <td class="">32</td>
-          <td>0</td><td>1</td>
-          <td>0</td>
-          <td class="c-muted">0</td>
-          <td>31</td>
-        </tr>
-        <tr>
-          <td><strong>Aaron Carn</strong></td>
-          <td>104</td><td>2</td>
-          <td class="">20</td>
-          <td class="">26</td>
-          <td>1</td><td>2</td>
-          <td>0</td>
-          <td class="c-green fw-bold">2</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Jamie Miller</strong></td>
-          <td>100</td><td>6</td>
-          <td class="">16</td>
-          <td class="">19</td>
-          <td>12</td><td>4</td>
-          <td>0</td>
-          <td class="c-green fw-bold">3</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Jacob Reimer</strong></td>
-          <td>45</td><td>0</td>
-          <td class="">11</td>
-          <td class="">8</td>
-          <td>3</td><td>1</td>
-          <td>0</td>
-          <td class="c-green fw-bold">1</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Marvin Davis</strong></td>
-          <td>28</td><td>1</td>
-          <td class="c-red">2</td>
-          <td class="">2</td>
-          <td>1</td><td>0</td>
-          <td>0</td>
-          <td class="c-muted">0</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td><strong>Danielle Hixon</strong></td>
-          <td>3</td><td>0</td>
-          <td class="c-red">1</td>
-          <td class="">1</td>
-          <td>0</td><td>0</td>
-          <td>0</td>
-          <td class="c-muted">0</td>
-          <td>0</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div id="section-agents" class="section">
-  <div class="filter-bar">
-    <input type="text" id="agentSearch" placeholder="🔍  Search agents..." oninput="filterAgents()">
-    <select id="agentSort" onchange="sortAgents()">
-      <option value="leads">Sort: Total Leads</option>
-      <option value="new">Sort: New This Week</option>
-      <option value="calls">Sort: Calls</option>
-      <option value="followup">Sort: Needs Follow-Up</option>
-      <option value="deals">Sort: Under Contract</option>
-    </select>
-  </div>
-  <div class="agent-grid" id="agentGrid">
-    <div class="agent-card" data-agent="ross howatt"
-         data-leads="504" data-new="1"
-         data-calls="8" data-followup="53"
-         data-deals="2" onclick="toggleDetail(8)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Ross Howatt</div>
-          <div class="agent-subtitle">504 leads &bull; <span class="c-amber">Watch</span></div>
-        </div>
-        <span class="badge badge-amber">Watch</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-amber">8 <span class="c-muted" style="font-weight:400;font-size:11px">(6↑ 2↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">53</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">6</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">6</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">1</span></div>
-      </div>
-      <div class="detail-panel" id="detail-8">
-        <div class="detail-section"><h4>Needs Follow-Up (53)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23957" target="_blank">Pat Harvey</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23865" target="_blank">Rajul Maheshwari</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23477" target="_blank">Jeff March</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22585" target="_blank">Leanne Rossi</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21793" target="_blank">Michael Bright</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21735" target="_blank">Sergey Aleksashenko</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Landing Page</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21494" target="_blank">Ingrid P</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">BoomTown</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21410" target="_blank">Margaret Cronin</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (1)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23957" target="_blank">Pat Harvey</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
-          <tr><td>Listing agreement?</td><td>2026-04-06</td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="guillermo bruce"
-         data-leads="445" data-new="2"
-         data-calls="1" data-followup="66"
-         data-deals="1" onclick="toggleDetail(25)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Guillermo Bruce</div>
-          <div class="agent-subtitle">445 leads &bull; <span class="c-amber">Watch</span></div>
-        </div>
-        <span class="badge badge-amber">Watch</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-red">1 <span class="c-muted" style="font-weight:400;font-size:11px">(1↑ 0↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">66</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">7</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">18</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">5</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">1</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-25">
-        <div class="detail-section"><h4>Needs Follow-Up (66)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23984" target="_blank">Justin Mooney</a></td><td>Lead</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23965" target="_blank">Trey Love</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23293" target="_blank">Christine Hughes - Realtor</a></td><td>Lead</td><td><span class="badge badge-teal">REALTOR</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23170" target="_blank">Shivani Patel</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23086" target="_blank">Gregory Collins</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">luxurypresence.com</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22498" target="_blank">Caroline Robbins</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22450" target="_blank">Thomas Costello</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22320" target="_blank">David</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (2)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23984" target="_blank">Justin Mooney</a></td><td>Lead</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23965" target="_blank">Trey Love</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="miranda frickenstein"
-         data-leads="427" data-new="0"
-         data-calls="70" data-followup="146"
-         data-deals="2" onclick="toggleDetail(18)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Miranda Frickenstein</div>
-          <div class="agent-subtitle">427 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">70 <span class="c-muted" style="font-weight:400;font-size:11px">(61↑ 9↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-red">146</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">9</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">6</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">3</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">3</span></div>
-      </div>
-      <div class="detail-panel" id="detail-18">
-        <div class="detail-section"><h4>Needs Follow-Up (146)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23883" target="_blank">Carmella Combs</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23844" target="_blank">Steven Page</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23490" target="_blank">Jarob Fetters</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">SIGN_CALL</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23449" target="_blank">Esther Hernandez</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23446" target="_blank">Teresa Harmon</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23444" target="_blank">Alexis</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23378" target="_blank">McMahon Welsh</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23089" target="_blank">Yev Gerasimenko</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
-          <tr><td>SEND CMA</td><td>2026-04-06</td></tr>
-          <tr><td>nurture email</td><td>2026-04-11</td></tr>
-          <tr><td>Follow Up</td><td>2026-04-11</td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="carson moree"
-         data-leads="361" data-new="5"
-         data-calls="28" data-followup="17"
-         data-deals="0" onclick="toggleDetail(34)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Carson Moree</div>
-          <div class="agent-subtitle">361 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">5</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">28 <span class="c-muted" style="font-weight:400;font-size:11px">(20↑ 8↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">17</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">2</span></div>
-      </div>
-      <div class="detail-panel" id="detail-34">
-        <div class="detail-section"><h4>Needs Follow-Up (17)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23973" target="_blank">Thomas Frazzetto</a></td><td>Lead</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23841" target="_blank">Emma Zimmerman</a></td><td>Lead</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23835" target="_blank">James Doucet</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23776" target="_blank">Loriann.e</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23520" target="_blank">Joe</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23519" target="_blank">Zinaida261972</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23513" target="_blank">Rizwana Hussain</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23471" target="_blank">Laura Inman</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (5)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23995" target="_blank">Anastasia</a></td><td>Met with Customer</td><td><span class="badge badge-teal">SIGN_CALL</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23994" target="_blank">Holly</a></td><td>Met with Customer</td><td><span class="badge badge-teal">SIGN_CALL</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23979" target="_blank">Mark Matreale</a></td><td>Met with Customer</td><td><span class="badge badge-teal">Newcomer Sign Call</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23973" target="_blank">Thomas Frazzetto</a></td><td>Lead</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23962" target="_blank">Joseph George</a></td><td>Nurture</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
-          <tr><td>Follow up Regarding Brown Trout</td><td>2026-04-06</td></tr>
-          <tr><td>Virtual Appointment 68 Angelo</td><td>2026-04-06</td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="gala suarez"
-         data-leads="331" data-new="0"
-         data-calls="4" data-followup="36"
-         data-deals="3" onclick="toggleDetail(9)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Gala Suarez</div>
-          <div class="agent-subtitle">331 leads &bull; <span class="c-amber">Watch</span></div>
-        </div>
-        <span class="badge badge-amber">Watch</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-red">4 <span class="c-muted" style="font-weight:400;font-size:11px">(3↑ 1↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">36</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">4</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">3</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-9">
-        <div class="detail-section"><h4>Needs Follow-Up (36)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21635" target="_blank">David Vandygriff</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21531" target="_blank">Kevin LaRue</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21516" target="_blank">Sam Gallardo</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21416" target="_blank">Brandi Frazier</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21316" target="_blank">Kathleen Morales</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21165" target="_blank">Colby Esslinger Davenport</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">BoomTown</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20958" target="_blank">Christina Reinhard</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20915" target="_blank">William Creel</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="megaen sandifer"
-         data-leads="299" data-new="4"
-         data-calls="62" data-followup="110"
-         data-deals="4" onclick="toggleDetail(20)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Megaen Sandifer</div>
-          <div class="agent-subtitle">299 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">4</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">62 <span class="c-muted" style="font-weight:400;font-size:11px">(43↑ 19↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-red">110</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">4</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">3</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">4</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">3</span></div>
-      </div>
-      <div class="detail-panel" id="detail-20">
-        <div class="detail-section"><h4>Needs Follow-Up (110)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23955" target="_blank">Vs</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22540" target="_blank">Garvin Thorson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22525" target="_blank">Jeff Damus</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22495" target="_blank">Lisa Jordan</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22393" target="_blank">Carmen Pizzo</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22344" target="_blank">Sharmila Somrah</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22048" target="_blank">Coral Elsman</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21931" target="_blank">Kyla Moravec</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">PERSONALTRANSACTION</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (4)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/24006" target="_blank">Bridget Williams</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23989" target="_blank">Kate Kleinhans</a></td><td>Met with Customer</td><td><span class="badge badge-teal">WALKIN</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23978" target="_blank">Guy Allsup</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23955" target="_blank">Vs</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
-          <tr><td>check back in on 210 flagler</td><td>2026-04-07</td></tr>
-          <tr><td>check in</td><td>2026-04-08</td></tr>
-          <tr><td>Reach back out about home process/ did kid get accepted!</td><td>2026-04-06</td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="kylee lawrence"
-         data-leads="265" data-new="5"
-         data-calls="20" data-followup="85"
-         data-deals="3" onclick="toggleDetail(17)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Kylee Lawrence</div>
-          <div class="agent-subtitle">265 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">5</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">20 <span class="c-muted" style="font-weight:400;font-size:11px">(12↑ 8↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-red">85</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">3</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">4</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">3</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">1</span></div>
-      </div>
-      <div class="detail-panel" id="detail-17">
-        <div class="detail-section"><h4>Needs Follow-Up (85)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23838" target="_blank">R Palande R Palande</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23826" target="_blank">Ramiro Alvarez</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23350" target="_blank">Eleanor Green</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">luxurypresence.com</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22606" target="_blank">Larry Mcshane</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22397" target="_blank">Joseph Dinis</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22186" target="_blank">Patrick McGee</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22118" target="_blank">William Harpster</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Luxury Presence</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22111" target="_blank">Traci McClung</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (5)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/24003" target="_blank">Kimberly Point</a></td><td>Met with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23999" target="_blank">Soma Nagarjuna</a></td><td>Nurture</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23992" target="_blank">Adrian Perez</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23974" target="_blank">Michael Paul Sumagpao</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23972" target="_blank">Jeff Marks</a></td><td>Nurture</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
-          <tr><td>Call Adrian</td><td>2026-04-06</td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="alanna o'rourke"
-         data-leads="188" data-new="1"
-         data-calls="23" data-followup="86"
-         data-deals="0" onclick="toggleDetail(29)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Alanna O'Rourke</div>
-          <div class="agent-subtitle">188 leads &bull; <span class="c-amber">Watch</span></div>
-        </div>
-        <span class="badge badge-amber">Watch</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">23 <span class="c-muted" style="font-weight:400;font-size:11px">(21↑ 2↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-red">86</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-29">
-        <div class="detail-section"><h4>Needs Follow-Up (86)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23976" target="_blank">Serenity Stevens</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23102" target="_blank">Gabe Smith</a></td><td>Lead</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22541" target="_blank">Tom Hartmann</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">REFERRALEXCHANGE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22523" target="_blank">Virgina Lanou</a></td><td>Lead</td><td><span class="badge badge-teal">OPENHOUSE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22513" target="_blank">Shantisha</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22229" target="_blank">Unknown Unknown</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Newcomer Sign Call</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21505" target="_blank">Sheryl Alexander - Trustee</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Homes.com</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21484" target="_blank">Sheila Matters</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Homes.com</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (1)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23976" target="_blank">Serenity Stevens</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="jeff rankin"
-         data-leads="153" data-new="0"
-         data-calls="24" data-followup="41"
-         data-deals="2" onclick="toggleDetail(24)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Jeff Rankin</div>
-          <div class="agent-subtitle">153 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">24 <span class="c-muted" style="font-weight:400;font-size:11px">(4↑ 20↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">41</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-24">
-        <div class="detail-section"><h4>Needs Follow-Up (41)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23833" target="_blank">David Ricci</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22542" target="_blank">Natalie Federico</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Homes.com</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22225" target="_blank">Donna Larson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22209" target="_blank">Debbie Bailey</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22194" target="_blank">Belinda Spradlin</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22192" target="_blank">Richard Doucette</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22191" target="_blank">Eric Thompson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22185" target="_blank">Katherine Drew</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Landing Page</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="bailey donovan"
-         data-leads="143" data-new="4"
-         data-calls="34" data-followup="52"
-         data-deals="0" onclick="toggleDetail(12)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Bailey Donovan</div>
-          <div class="agent-subtitle">143 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">4</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">34 <span class="c-muted" style="font-weight:400;font-size:11px">(28↑ 6↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-amber">52</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">7</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">1</span></div>
-      </div>
-      <div class="detail-panel" id="detail-12">
-        <div class="detail-section"><h4>Needs Follow-Up (52)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23967" target="_blank">Melissa Hernsndez</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23960" target="_blank">Todd Stermer</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23333" target="_blank">Yvette Seebach</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22566" target="_blank">Kwesi Coleman</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22392" target="_blank">Caitlyn D'Angelo</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22178" target="_blank">Hallie Johnston</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21337" target="_blank">Liz Skeels</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21307" target="_blank">Eugene Krug</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (4)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23985" target="_blank">Carly</a></td><td>Showing Homes</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23968" target="_blank">Joanne Blankenship</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Newcomer Sign Call</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23967" target="_blank">Melissa Hernsndez</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23960" target="_blank">Todd Stermer</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
-          <tr><td>Find a house in IL yet?</td><td>2026-04-06</td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="ashley huntington"
-         data-leads="121" data-new="7"
-         data-calls="9" data-followup="17"
-         data-deals="3" onclick="toggleDetail(32)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Ashley Huntington</div>
-          <div class="agent-subtitle">121 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">7</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-amber">9 <span class="c-muted" style="font-weight:400;font-size:11px">(6↑ 3↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">17</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">3</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">3</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-32">
-        <div class="detail-section"><h4>Needs Follow-Up (17)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23991" target="_blank">Parker Stuart</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23977" target="_blank">Carrie Blodgett</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23975" target="_blank">Adam Zona</a></td><td>Lead</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23854" target="_blank">Chad Smith</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23853" target="_blank">Emily Mannick</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23422" target="_blank">Jessica Mize</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23355" target="_blank">Jacob Bolton</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTREFERRAL</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23279" target="_blank">John Kenna</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (7)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23996" target="_blank">Windy Deyton</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23991" target="_blank">Parker Stuart</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23980" target="_blank">Isaiah Jackson</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23977" target="_blank">Carrie Blodgett</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23975" target="_blank">Adam Zona</a></td><td>Lead</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23959" target="_blank">Pamela Chancy</a></td><td>Appointment Set</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="tania hidalgo"
-         data-leads="110" data-new="5"
-         data-calls="82" data-followup="32"
-         data-deals="0" onclick="toggleDetail(30)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Tania Hidalgo</div>
-          <div class="agent-subtitle">110 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">5</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">82 <span class="c-muted" style="font-weight:400;font-size:11px">(77↑ 5↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">32</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">31</span></div>
-      </div>
-      <div class="detail-panel" id="detail-30">
-        <div class="detail-section"><h4>Needs Follow-Up (32)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/24009" target="_blank">Monica McCarthy</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23963" target="_blank">Melanie Donovan</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23840" target="_blank">Melody Johns</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21053" target="_blank">Diane & David Boyd</a></td><td>Lead</td><td><span class="badge badge-teal">Fello File Import</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21040" target="_blank">Jeremy Mcintyre</a></td><td>Lead</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21037" target="_blank">Kent ONeil</a></td><td>Lead</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21030" target="_blank">Samantha Johnson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21029" target="_blank">Mike Beasley</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Fello Integration</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (5)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/24009" target="_blank">Monica McCarthy</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23998" target="_blank">James Daniels</a></td><td>Met with Customer</td><td><span class="badge badge-teal">OPENHOUSE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23997" target="_blank">Curt Griffin</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23990" target="_blank">Brenda Melendez</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23963" target="_blank">Melanie Donovan</a></td><td>Lead</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>Upcoming Tasks</h4><table><tr><th>Task</th><th>Due</th></tr>
-          <tr><td>Follow Up</td><td>2026-04-07</td></tr>
-          <tr><td>Follow Up</td><td>2026-04-07</td></tr>
-          <tr><td>Follow Up</td><td>2026-04-07</td></tr>
-          <tr><td>Follow Up</td><td>2026-04-07</td></tr>
-          <tr><td>Follow Up</td><td>2026-04-07</td></tr>
-          <tr><td>Follow Up</td><td>2026-04-07</td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="aaron carn"
-         data-leads="104" data-new="2"
-         data-calls="20" data-followup="26"
-         data-deals="2" onclick="toggleDetail(28)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Aaron Carn</div>
-          <div class="agent-subtitle">104 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">20 <span class="c-muted" style="font-weight:400;font-size:11px">(7↑ 13↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">26</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">2</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">2</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-28">
-        <div class="detail-section"><h4>Needs Follow-Up (26)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22297" target="_blank">Kerri Boatright</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21285" target="_blank">Tony White</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20538" target="_blank">Lindsey Lebhar</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">ZCONNECT</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20499" target="_blank">Joseph Lolley</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20405" target="_blank">Emma Marcal</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20370" target="_blank">Rob Hootselle</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">UNKNOWN</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20364" target="_blank">Lina Kramer</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">ZCONNECT</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20345" target="_blank">Schooners Seafood</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">SIGN_CALL</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (2)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23970" target="_blank">Catherine Jones</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23956" target="_blank">Holly McAlister</a></td><td>Met with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="jamie miller"
-         data-leads="100" data-new="6"
-         data-calls="16" data-followup="19"
-         data-deals="3" onclick="toggleDetail(21)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Jamie Miller</div>
-          <div class="agent-subtitle">100 leads &bull; <span class="c-green">Strong</span></div>
-        </div>
-        <span class="badge badge-green">Strong</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">6</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-green">16 <span class="c-muted" style="font-weight:400;font-size:11px">(14↑ 2↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">19</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">12</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">4</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">3</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-21">
-        <div class="detail-section"><h4>Needs Follow-Up (19)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23981" target="_blank">Don B</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">BoomTown</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23850" target="_blank">Alan Coggan</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23428" target="_blank">Dwayne Murray</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23377" target="_blank">Mary Lowe</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23334" target="_blank">Harley Bogley</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23291" target="_blank">Fletcher Roberts</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23057" target="_blank">Tammi Parish</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">App</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/22373" target="_blank">Joseph Maguire</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">HomeLight</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (6)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/24005" target="_blank">Ashley Miller</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/24004" target="_blank">Holly McWhorter</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/24002" target="_blank">Sushma Murtyraju</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/24001" target="_blank">Colin Monagle</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23986" target="_blank">Ken Koehler</a></td><td>Spoke with Customer</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23981" target="_blank">Don B</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">BoomTown</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="jacob reimer"
-         data-leads="45" data-new="0"
-         data-calls="11" data-followup="8"
-         data-deals="1" onclick="toggleDetail(31)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Jacob Reimer</div>
-          <div class="agent-subtitle">45 leads &bull; <span class="c-amber">Watch</span></div>
-        </div>
-        <span class="badge badge-amber">Watch</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-amber">11 <span class="c-muted" style="font-weight:400;font-size:11px">(2↑ 9↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">8</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">3</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">1</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-31">
-        <div class="detail-section"><h4>Needs Follow-Up (8)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23453" target="_blank">Ana Kim</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23325" target="_blank">Catherine Rosal</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23303" target="_blank">Scott Moncreiff</a></td><td>Lead</td><td><span class="badge badge-teal">Homes.com</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/21919" target="_blank">Geo Metwin</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/16566" target="_blank">Julie Weller</a></td><td>Lead</td><td><span class="badge badge-teal">ZCONNECT</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/13477" target="_blank">Nick Zelaya</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/12606" target="_blank">Maria Zuluaga</a></td><td>Lead</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/8678" target="_blank">Ed Bayne</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">Zillow</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="marvin davis"
-         data-leads="28" data-new="1"
-         data-calls="2" data-followup="2"
-         data-deals="0" onclick="toggleDetail(35)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Marvin Davis</div>
-          <div class="agent-subtitle">28 leads &bull; <span class="c-amber">Watch</span></div>
-        </div>
-        <span class="badge badge-amber">Watch</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-red">2 <span class="c-muted" style="font-weight:400;font-size:11px">(0↑ 2↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">2</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">1</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-35">
-        <div class="detail-section"><h4>Needs Follow-Up (2)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23468" target="_blank">Teresa Austin</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23437" target="_blank">Tylor Johnson</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">AGENTLEAD</span></td></tr>
-        </table></div>
-        <div class="detail-section"><h4>New Leads This Week (1)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/23964" target="_blank">Alisa Griffin</a></td><td>Appointment Set</td><td><span class="badge badge-teal">Zillow Preferred</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-    <div class="agent-card" data-agent="danielle hixon"
-         data-leads="3" data-new="0"
-         data-calls="1" data-followup="1"
-         data-deals="0" onclick="toggleDetail(13)">
-      <div class="agent-card-header">
-        <div>
-          <div class="agent-name">Danielle Hixon</div>
-          <div class="agent-subtitle">3 leads &bull; <span class="c-red">At Risk</span></div>
-        </div>
-        <span class="badge badge-red">At Risk</span>
-      </div>
-      <div class="agent-card-body">
-        <div class="metric-row"><span class="metric-label">New Leads (7d)</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Calls This Week</span><span class="metric-value c-red">1 <span class="c-muted" style="font-weight:400;font-size:11px">(0↑ 1↓)</span></span></div>
-        <div class="metric-row"><span class="metric-label">Needs Follow-Up</span><span class="metric-value c-teal">1</span></div>
-        <div class="metric-row"><span class="metric-label">Appointments Set</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Showing Homes</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Active Listings</span><span class="metric-value">0</span></div>
-        <div class="metric-row"><span class="metric-label">Under Contract</span><span class="metric-value c-green fw-bold">0</span></div>
-        <div class="metric-row"><span class="metric-label">Upcoming Tasks</span><span class="metric-value">0</span></div>
-      </div>
-      <div class="detail-panel" id="detail-13">
-        <div class="detail-section"><h4>Needs Follow-Up (1)</h4><table><tr><th>Lead</th><th>Stage</th><th>Source</th></tr>
-          <tr><td><a href="https://app.followupboss.com/people/20277" target="_blank">Kathryn Hennessy</a></td><td>Attempted Contact</td><td><span class="badge badge-teal">GOOGLE</span></td></tr>
-        </table></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="section-pipeline" class="section">
-  <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-icon">📊</div><div class="value">353</div><div class="label">Active Deals</div></div>
-    <div class="kpi good"><div class="kpi-icon">✍️</div><div class="value">26</div><div class="label">Under Contract</div></div>
-    <div class="kpi"><div class="kpi-icon">🏆</div><div class="value">0</div><div class="label">Closed (Month)</div></div>
-    <div class="kpi"><div class="kpi-icon">📅</div><div class="value">44</div><div class="label">Appointments</div></div>
-    <div class="kpi"><div class="kpi-icon">🏠</div><div class="value">61</div><div class="label">Showing Homes</div></div>
-  </div>
-
-  <div class="section-header">Stage Funnel by Agent</div>
-  <div class="table-wrap scrollable">
-    <table>
-      <thead><tr>
-        <th>Agent</th><th>Lead</th><th>Attempted</th><th>Spoke</th>
-        <th>Appt Set</th><th>Showing</th><th>Submitting</th>
-        <th>Listing Agmt</th><th>Active Listing</th><th>Deals</th><th>UC</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Ross Howatt</strong></td>
-          <td>0</td><td>53</td>
-          <td>0</td><td>0</td>
-          <td>6</td><td>1</td>
-          <td>0</td><td>6</td>
-          <td>30</td><td class="c-green fw-bold">2</td>
-        </tr>
-        <tr>
-          <td><strong>Guillermo Bruce</strong></td>
-          <td>8</td><td>58</td>
-          <td>0</td><td>7</td>
-          <td>18</td><td>4</td>
-          <td>0</td><td>5</td>
-          <td>22</td><td class="c-green fw-bold">1</td>
-        </tr>
-        <tr>
-          <td><strong>Miranda Frickenstein</strong></td>
-          <td>0</td><td>146</td>
-          <td>0</td><td>9</td>
-          <td>6</td><td>0</td>
-          <td>2</td><td>1</td>
-          <td>70</td><td class="c-green fw-bold">2</td>
-        </tr>
-        <tr>
-          <td><strong>Carson Moree</strong></td>
-          <td>12</td><td>5</td>
-          <td>0</td><td>0</td>
-          <td>2</td><td>1</td>
-          <td>0</td><td>0</td>
-          <td>6</td><td class="c-green fw-bold">0</td>
-        </tr>
-        <tr>
-          <td><strong>Gala Suarez</strong></td>
-          <td>1</td><td>35</td>
-          <td>0</td><td>0</td>
-          <td>4</td><td>1</td>
-          <td>0</td><td>0</td>
-          <td>22</td><td class="c-green fw-bold">3</td>
-        </tr>
-        <tr>
-          <td><strong>Megaen Sandifer</strong></td>
-          <td>0</td><td>110</td>
-          <td>0</td><td>2</td>
-          <td>4</td><td>0</td>
-          <td>0</td><td>3</td>
-          <td>30</td><td class="c-green fw-bold">4</td>
-        </tr>
-        <tr>
-          <td><strong>Kylee Lawrence</strong></td>
-          <td>10</td><td>75</td>
-          <td>0</td><td>3</td>
-          <td>4</td><td>0</td>
-          <td>0</td><td>2</td>
-          <td>38</td><td class="c-green fw-bold">3</td>
-        </tr>
-        <tr>
-          <td><strong>Alanna O'Rourke</strong></td>
-          <td>6</td><td>80</td>
-          <td>0</td><td>1</td>
-          <td>0</td><td>0</td>
-          <td>0</td><td>0</td>
-          <td>1</td><td class="c-green fw-bold">0</td>
-        </tr>
-        <tr>
-          <td><strong>Jeff Rankin</strong></td>
-          <td>1</td><td>40</td>
-          <td>0</td><td>1</td>
-          <td>0</td><td>0</td>
-          <td>0</td><td>1</td>
-          <td>29</td><td class="c-green fw-bold">2</td>
-        </tr>
-        <tr>
-          <td><strong>Bailey Donovan</strong></td>
-          <td>2</td><td>50</td>
-          <td>0</td><td>2</td>
-          <td>7</td><td>0</td>
-          <td>1</td><td>0</td>
-          <td>23</td><td class="c-green fw-bold">0</td>
-        </tr>
-        <tr>
-          <td><strong>Ashley Huntington</strong></td>
-          <td>7</td><td>10</td>
-          <td>0</td><td>2</td>
-          <td>2</td><td>0</td>
-          <td>3</td><td>0</td>
-          <td>12</td><td class="c-green fw-bold">3</td>
-        </tr>
-        <tr>
-          <td><strong>Tania Hidalgo</strong></td>
-          <td>17</td><td>15</td>
-          <td>0</td><td>0</td>
-          <td>1</td><td>0</td>
-          <td>0</td><td>0</td>
-          <td>9</td><td class="c-green fw-bold">0</td>
-        </tr>
-        <tr>
-          <td><strong>Aaron Carn</strong></td>
-          <td>0</td><td>26</td>
-          <td>0</td><td>1</td>
-          <td>2</td><td>0</td>
-          <td>0</td><td>0</td>
-          <td>21</td><td class="c-green fw-bold">2</td>
-        </tr>
-        <tr>
-          <td><strong>Jamie Miller</strong></td>
-          <td>1</td><td>18</td>
-          <td>0</td><td>12</td>
-          <td>4</td><td>0</td>
-          <td>0</td><td>0</td>
-          <td>36</td><td class="c-green fw-bold">3</td>
-        </tr>
-        <tr>
-          <td><strong>Jacob Reimer</strong></td>
-          <td>4</td><td>4</td>
-          <td>0</td><td>3</td>
-          <td>1</td><td>0</td>
-          <td>0</td><td>0</td>
-          <td>3</td><td class="c-green fw-bold">1</td>
-        </tr>
-        <tr>
-          <td><strong>Marvin Davis</strong></td>
-          <td>0</td><td>2</td>
-          <td>0</td><td>1</td>
-          <td>0</td><td>0</td>
-          <td>0</td><td>0</td>
-          <td>0</td><td class="c-green fw-bold">0</td>
-        </tr>
-        <tr>
-          <td><strong>Danielle Hixon</strong></td>
-          <td>0</td><td>1</td>
-          <td>0</td><td>0</td>
-          <td>0</td><td>0</td>
-          <td>0</td><td>0</td>
-          <td>1</td><td class="c-green fw-bold">0</td>
-        </tr>
-      </tbody></table></div>
-
-  <div class="section-header">Under Contract Deals</div>
-  <div class="table-wrap scrollable">
-    <table>
-      <thead><tr><th>Agent</th><th>Deal</th><th>Stage</th><th>Created</th></tr></thead>
-      <tbody>
-        <tr><td>Ross Howatt</td><td>324 North Shadowwood Drive</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-12</td></tr>
-        <tr><td>Ross Howatt</td><td>4365 Wood Haven Dr</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-05</td></tr>
-        <tr><td>Guillermo Bruce</td><td>John & Patricia Pelle</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-12</td></tr>
-        <tr><td>Miranda Frickenstein</td><td>Jutta Vogt</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-23</td></tr>
-        <tr><td>Gala Suarez</td><td>Bill & Amy Miller</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-25</td></tr>
-        <tr><td>Gala Suarez</td><td>Mary Joann Neligan</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-25</td></tr>
-        <tr><td>Gala Suarez</td><td>Jenny Leonidas</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-06</td></tr>
-        <tr><td>Megaen Sandifer</td><td>30 Tracker St</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-19</td></tr>
-        <tr><td>Megaen Sandifer</td><td>158 Hubbard Bnd</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-10</td></tr>
-        <tr><td>Megaen Sandifer</td><td>11160 Pine Estate Rd W</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-01</td></tr>
-        <tr><td>Kylee Lawrence</td><td>Hirshol Pheir and Charysse Levine</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-27</td></tr>
-        <tr><td>Kylee Lawrence</td><td>Josh Moore</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-26</td></tr>
-        <tr><td>Jeff Rankin</td><td>2124 Wood Stork Ave St. Augustine, FL 32084</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-30</td></tr>
-        <tr><td>Jeff Rankin</td><td>44 Wellstream Ln, Palm Coast, FL 32164</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-22</td></tr>
-        <tr><td>Ashley Huntington</td><td>Parker Stuart</td><td><span class="badge badge-green">Pending</span></td><td>2026-04-03</td></tr>
-        <tr><td>Ashley Huntington</td><td>2966 Swaps Ct, Green Cove Springs, FL 32043</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-23</td></tr>
-        <tr><td>Ashley Huntington</td><td>61 Foxhall Ln</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-17</td></tr>
-        <tr><td>Aaron Carn</td><td>107 Seasons Court</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-05</td></tr>
-        <tr><td>Aaron Carn</td><td>Dustin Shawn Diehl</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-15</td></tr>
-        <tr><td>Jamie Miller</td><td>Barbara Carr</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-04</td></tr>
-        <tr><td>Jamie Miller</td><td>Brett Johnson</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-28</td></tr>
-        <tr><td>Jamie Miller</td><td>Justin Murty</td><td><span class="badge badge-green">Pending</span></td><td>2026-02-26</td></tr>
-        <tr><td>Jacob Reimer</td><td>Ryan Phillipi</td><td><span class="badge badge-green">Pending</span></td><td>2026-03-25</td></tr>
-      </tbody></table></div>
-</div>
-
-<div id="section-activity" class="section">
-  <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-icon">📞</div><div class="value">415</div><div class="label">Total Calls</div></div>
-    <div class="kpi"><div class="kpi-icon">📥</div><div class="value">43</div><div class="label">New Leads</div></div>
-    <div class="kpi alert"><div class="kpi-icon">⏰</div><div class="value">797</div><div class="label">Overdue Follow-Ups</div></div>
-    <div class="kpi"><div class="kpi-icon">📋</div><div class="value">42</div><div class="label">Upcoming Tasks</div></div>
-  </div>
-
-  <div class="section-header">Call Activity by Agent</div>
-  <div class="table-wrap scrollable">
-    <table>
-      <thead><tr><th>Agent</th><th>Calls</th><th>Outbound</th><th>Inbound</th><th>Duration</th><th>Volume</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Tania Hidalgo</strong></td>
-          <td class="c-green fw-bold">82</td>
-          <td>77</td><td>5</td>
-          <td>42.2m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Miranda Frickenstein</strong></td>
-          <td class="c-green fw-bold">70</td>
-          <td>61</td><td>9</td>
-          <td>43.3m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:85%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Megaen Sandifer</strong></td>
-          <td class="c-green fw-bold">62</td>
-          <td>43</td><td>19</td>
-          <td>190.0m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:75%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Bailey Donovan</strong></td>
-          <td class="c-green fw-bold">34</td>
-          <td>28</td><td>6</td>
-          <td>36.7m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill green" style="width:41%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Carson Moree</strong></td>
-          <td class="c-amber">28</td>
-          <td>20</td><td>8</td>
-          <td>43.8m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:34%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Jeff Rankin</strong></td>
-          <td class="c-amber">24</td>
-          <td>4</td><td>20</td>
-          <td>73.0m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:29%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Alanna O'Rourke</strong></td>
-          <td class="c-amber">23</td>
-          <td>21</td><td>2</td>
-          <td>8.9m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:28%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Kylee Lawrence</strong></td>
-          <td class="c-amber">20</td>
-          <td>12</td><td>8</td>
-          <td>31.9m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:24%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Aaron Carn</strong></td>
-          <td class="c-amber">20</td>
-          <td>7</td><td>13</td>
-          <td>83.5m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:24%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Jamie Miller</strong></td>
-          <td class="c-amber">16</td>
-          <td>14</td><td>2</td>
-          <td>3.9m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:19%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Jacob Reimer</strong></td>
-          <td class="c-amber">11</td>
-          <td>2</td><td>9</td>
-          <td>36.9m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill amber" style="width:13%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Ashley Huntington</strong></td>
-          <td class="c-red">9</td>
-          <td>6</td><td>3</td>
-          <td>9.0m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:10%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Ross Howatt</strong></td>
-          <td class="c-red">8</td>
-          <td>6</td><td>2</td>
-          <td>33.2m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:9%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Gala Suarez</strong></td>
-          <td class="c-red">4</td>
-          <td>3</td><td>1</td>
-          <td>0.1m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:4%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Marvin Davis</strong></td>
-          <td class="c-red">2</td>
-          <td>0</td><td>2</td>
-          <td>0.0m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:2%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Guillermo Bruce</strong></td>
-          <td class="c-red">1</td>
-          <td>1</td><td>0</td>
-          <td>0.6m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:1%"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><strong>Danielle Hixon</strong></td>
-          <td class="c-red">1</td>
-          <td>0</td><td>1</td>
-          <td>0.0m</td>
-          <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill red" style="width:1%"></div></div></div></td>
-        </tr>
-      </tbody></table></div>
-
-  <div class="section-header">New Leads by Agent</div>
-  <div class="table-wrap scrollable">
-    <table>
-      <thead><tr><th>Agent</th><th>New Leads</th><th>Lead Names</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Ashley Huntington</strong></td><td>7</td><td style="font-size:12px">Windy Deyton, Parker Stuart, Isaiah Jackson, Carrie Blodgett, Adam Zona <span class="c-muted">+2 more</span></td></tr>
-        <tr><td><strong>Jamie Miller</strong></td><td>6</td><td style="font-size:12px">Ashley Miller, Holly McWhorter, Sushma Murtyraju, Colin Monagle, Ken Koehler <span class="c-muted">+1 more</span></td></tr>
-        <tr><td><strong>Carson Moree</strong></td><td>5</td><td style="font-size:12px">Anastasia, Holly, Mark Matreale, Thomas Frazzetto, Joseph George</td></tr>
-        <tr><td><strong>Kylee Lawrence</strong></td><td>5</td><td style="font-size:12px">Kimberly Point, Soma Nagarjuna, Adrian Perez, Michael Paul Sumagpao, Jeff Marks</td></tr>
-        <tr><td><strong>Tania Hidalgo</strong></td><td>5</td><td style="font-size:12px">Monica McCarthy, James Daniels, Curt Griffin, Brenda Melendez, Melanie Donovan</td></tr>
-        <tr><td><strong>Megaen Sandifer</strong></td><td>4</td><td style="font-size:12px">Bridget Williams, Kate Kleinhans, Guy Allsup, Vs</td></tr>
-        <tr><td><strong>Bailey Donovan</strong></td><td>4</td><td style="font-size:12px">Carly, Joanne Blankenship, Melissa Hernsndez, Todd Stermer</td></tr>
-        <tr><td><strong>Guillermo Bruce</strong></td><td>2</td><td style="font-size:12px">Justin Mooney, Trey Love</td></tr>
-        <tr><td><strong>Aaron Carn</strong></td><td>2</td><td style="font-size:12px">Catherine Jones, Holly McAlister</td></tr>
-        <tr><td><strong>Ross Howatt</strong></td><td>1</td><td style="font-size:12px">Pat Harvey</td></tr>
-        <tr><td><strong>Alanna O'Rourke</strong></td><td>1</td><td style="font-size:12px">Serenity Stevens</td></tr>
-        <tr><td><strong>Marvin Davis</strong></td><td>1</td><td style="font-size:12px">Alisa Griffin</td></tr>
-      </tbody></table></div>
-</div>
-
-<div id="section-weekly" class="section">
-  <div class="rollup-card">
-    <h3>Week at a Glance</h3>
-    <div class="kpi-grid">
-      <div class="kpi"><div class="kpi-icon">📥</div><div class="value">43</div><div class="label">New Leads</div></div>
-      <div class="kpi"><div class="kpi-icon">📞</div><div class="value">415</div><div class="label">Calls Made</div></div>
-      <div class="kpi"><div class="kpi-icon">📅</div><div class="value">44</div><div class="label">Appts Set</div></div>
-      <div class="kpi"><div class="kpi-icon">🏠</div><div class="value">61</div><div class="label">Showing</div></div>
-      <div class="kpi good"><div class="kpi-icon">✍️</div><div class="value">26</div><div class="label">Under Contract</div></div>
-      <div class="kpi"><div class="kpi-icon">🏆</div><div class="value">0</div><div class="label">Closed (Month)</div></div>
+<div class="content">
+  <!-- OVERVIEW TAB -->
+  <div class="tab-panel active" id="panel-overview">
+    <div class="kpi-grid" id="kpiGrid"></div>
+    <div class="section-title">Pipeline Funnel</div>
+    <div class="funnel" id="funnelChart"></div>
+    <div class="section-title">Agent Comparison</div>
+    <div class="agent-table-wrap">
+      <table class="agent-table" id="agentTable">
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Health</th>
+            <th>Leads</th>
+            <th>New (7d)</th>
+            <th>Calls (7d)</th>
+            <th>Appts Set</th>
+            <th>Showing</th>
+            <th>Under Contract</th>
+            <th>Needs F/U</th>
+          </tr>
+        </thead>
+        <tbody id="agentTableBody"></tbody>
+      </table>
     </div>
   </div>
 
-  <div class="rollup-card">
-    <h3>Agent Performance Ranking</h3>
-    <div class="table-wrap scrollable" style="border:none;margin:0">
-      <table>
-        <thead><tr><th>#</th><th>Agent</th><th>Calls</th><th>New</th><th>Follow-Up</th><th>Appts</th><th>UC</th><th>Health</th></tr></thead>
-        <tbody>
-          <tr>
-            <td>1</td><td><strong>Tania Hidalgo</strong></td>
-            <td>82</td><td>5</td>
-            <td class="">32</td>
-            <td>0</td>
-            <td class="c-green fw-bold">0</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>2</td><td><strong>Miranda Frickenstein</strong></td>
-            <td>70</td><td>0</td>
-            <td class="c-red">146</td>
-            <td>9</td>
-            <td class="c-green fw-bold">2</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>3</td><td><strong>Megaen Sandifer</strong></td>
-            <td>62</td><td>4</td>
-            <td class="c-red">110</td>
-            <td>2</td>
-            <td class="c-green fw-bold">4</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>4</td><td><strong>Jamie Miller</strong></td>
-            <td>16</td><td>6</td>
-            <td class="">19</td>
-            <td>12</td>
-            <td class="c-green fw-bold">3</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>5</td><td><strong>Ashley Huntington</strong></td>
-            <td>9</td><td>7</td>
-            <td class="">17</td>
-            <td>2</td>
-            <td class="c-green fw-bold">3</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>6</td><td><strong>Bailey Donovan</strong></td>
-            <td>34</td><td>4</td>
-            <td class="c-amber">52</td>
-            <td>2</td>
-            <td class="c-green fw-bold">0</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>7</td><td><strong>Carson Moree</strong></td>
-            <td>28</td><td>5</td>
-            <td class="">17</td>
-            <td>0</td>
-            <td class="c-green fw-bold">0</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>8</td><td><strong>Aaron Carn</strong></td>
-            <td>20</td><td>2</td>
-            <td class="">26</td>
-            <td>1</td>
-            <td class="c-green fw-bold">2</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>9</td><td><strong>Kylee Lawrence</strong></td>
-            <td>20</td><td>5</td>
-            <td class="c-red">85</td>
-            <td>3</td>
-            <td class="c-green fw-bold">3</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>10</td><td><strong>Jeff Rankin</strong></td>
-            <td>24</td><td>0</td>
-            <td class="c-amber">41</td>
-            <td>1</td>
-            <td class="c-green fw-bold">2</td>
-            <td><span class="badge badge-green">Strong</span></td>
-          </tr>
-          <tr>
-            <td>11</td><td><strong>Jacob Reimer</strong></td>
-            <td>11</td><td>0</td>
-            <td class="">8</td>
-            <td>3</td>
-            <td class="c-green fw-bold">1</td>
-            <td><span class="badge badge-amber">Watch</span></td>
-          </tr>
-          <tr>
-            <td>12</td><td><strong>Guillermo Bruce</strong></td>
-            <td>1</td><td>2</td>
-            <td class="c-amber">66</td>
-            <td>7</td>
-            <td class="c-green fw-bold">1</td>
-            <td><span class="badge badge-amber">Watch</span></td>
-          </tr>
-          <tr>
-            <td>13</td><td><strong>Gala Suarez</strong></td>
-            <td>4</td><td>0</td>
-            <td class="">36</td>
-            <td>0</td>
-            <td class="c-green fw-bold">3</td>
-            <td><span class="badge badge-amber">Watch</span></td>
-          </tr>
-          <tr>
-            <td>14</td><td><strong>Ross Howatt</strong></td>
-            <td>8</td><td>1</td>
-            <td class="c-amber">53</td>
-            <td>0</td>
-            <td class="c-green fw-bold">2</td>
-            <td><span class="badge badge-amber">Watch</span></td>
-          </tr>
-          <tr>
-            <td>15</td><td><strong>Alanna O'Rourke</strong></td>
-            <td>23</td><td>1</td>
-            <td class="c-red">86</td>
-            <td>1</td>
-            <td class="c-green fw-bold">0</td>
-            <td><span class="badge badge-amber">Watch</span></td>
-          </tr>
-          <tr>
-            <td>16</td><td><strong>Marvin Davis</strong></td>
-            <td>2</td><td>1</td>
-            <td class="">2</td>
-            <td>1</td>
-            <td class="c-green fw-bold">0</td>
-            <td><span class="badge badge-amber">Watch</span></td>
-          </tr>
-          <tr>
-            <td>17</td><td><strong>Danielle Hixon</strong></td>
-            <td>1</td><td>0</td>
-            <td class="">1</td>
-            <td>0</td>
-            <td class="c-green fw-bold">0</td>
-            <td><span class="badge badge-red">At Risk</span></td>
-          </tr>
-        </tbody></table></div>
+  <!-- SCORECARDS TAB -->
+  <div class="tab-panel" id="panel-scorecards">
+    <div class="controls">
+      <input type="text" class="search-input" id="scSearch" placeholder="Search agents...">
+      <select class="sort-select" id="scSort">
+        <option value="health">Sort by Health Score</option>
+        <option value="leads">Sort by Total Leads</option>
+        <option value="calls">Sort by Calls</option>
+        <option value="name">Sort by Name</option>
+      </select>
+    </div>
+    <div class="scorecard-grid" id="scorecardGrid"></div>
   </div>
-  <div class="rollup-card"><h3>Action Items for Leadership</h3>
-    <div class="action-item red"><span class="action-label c-red">Low Call Volume</span><span>Guillermo Bruce, Gala Suarez, Marvin Davis, Danielle Hixon — fewer than 5 calls this week. Coach on daily prospecting.</span></div>
-    <div class="action-item amber"><span class="action-label c-amber">High Overdue</span><span>Guillermo Bruce (66), Miranda Frickenstein (146), Megaen Sandifer (110), Kylee Lawrence (85), Alanna O'Rourke (86). Review smart lists and prioritize outreach.</span></div>
-    <div class="action-item blue"><span class="action-label c-teal">No New Leads</span><span>Miranda Frickenstein, Gala Suarez, Jeff Rankin. Check lead routing and source activity.</span></div>
-    <div class="action-item green"><span class="action-label c-green">Under Contract</span><span>Ross Howatt (2), Guillermo Bruce (1), Miranda Frickenstein (2), Gala Suarez (3), Megaen Sandifer (4), Kylee Lawrence (3), Jeff Rankin (2), Ashley Huntington (3), Aaron Carn (2), Jamie Miller (3), Jacob Reimer (1). Verify TC handoff complete and deal cards in Sisu.</span></div>
+
+  <!-- PIPELINE TAB -->
+  <div class="tab-panel" id="panel-pipeline">
+    <div class="section-title">Stage Funnel</div>
+    <div class="funnel" id="funnelChart2"></div>
+    <div class="section-title">Under Contract Deals</div>
+    <div class="deal-list" id="ucDealList"></div>
+    <div class="section-title">Stuck Leads (Past Dwell Threshold)</div>
+    <div id="stuckLeadList"></div>
   </div>
-</div>
 
-</div><!-- /main -->
+  <!-- ACTIVITY TAB -->
+  <div class="tab-panel" id="panel-activity">
+    <div class="section-title">Call Volume by Agent (7 Days)</div>
+    <div class="bar-chart" id="callBars"></div>
+    <div class="section-title">New Leads by Agent (7 Days)</div>
+    <div class="bar-chart" id="leadBars"></div>
+  </div>
 
-<div class="footer">
-  <img src="https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/1abc07f7-edce-49cb-b4ce-ec2cd52a4508" alt="TNG" onerror="this.style.display='none'"><br>
-  The Newcomer Group &bull; Leadership Command Center &bull; Auto-generated from Follow Up Boss
+  <!-- WEEKLY ROLLUP TAB -->
+  <div class="tab-panel" id="panel-rollup">
+    <div class="section-title">Agent Rankings</div>
+    <div class="agent-table-wrap">
+      <table class="ranking-table" id="rankingTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Agent</th>
+            <th>Health</th>
+            <th>Calls</th>
+            <th>New Leads</th>
+            <th>Under Contract</th>
+            <th>Needs Follow-Up</th>
+          </tr>
+        </thead>
+        <tbody id="rankingBody"></tbody>
+      </table>
+    </div>
+    <div class="section-title">Action Items for Leadership</div>
+    <div class="action-list" id="actionList"></div>
+  </div>
 </div>
 
 <script>
-function switchTab(name) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('section-' + name).classList.add('active');
-  event.target.classList.add('active');
-}
+const D = {"summary": {"totalAgents": 9, "totalPipeline": 1558, "newLeads7d": 21, "totalCalls7d": 194, "underContract": 10, "closedThisMonth": 0, "needsFollowUp": 60, "aggregateStages": {"Appointment Set": 17, "Nurture": 942, "Spoke with Customer": 129, "Met with Customer": 41, "Attempted Contact": 240, "Submitting Offers": 5, "Lead": 51, "Closed": 90, "Showing Homes": 25, "Listing Agreement": 3, "Under Contract": 9, "Active Listing": 6}}, "agents": [{"id": 30, "name": "Tania Hidalgo", "email": "Tania@thenewcomergroup.com", "totalLeads": 114, "newLeads7d": 9, "stageCounts": {"Nurture": 69, "Appointment Set": 2, "Met with Customer": 1, "Spoke with Customer": 10, "Lead": 16, "Showing Homes": 1, "Attempted Contact": 14, "Closed": 1}, "needsFollowUp": 10, "stuckLeads": [{"id": 23963, "name": "Melanie Donovan", "stage": "Lead", "daysStuck": 6, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 21053, "name": "Diane & David Boyd", "stage": "Lead", "daysStuck": 6, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 21040, "name": "Jeremy Mcintyre", "stage": "Lead", "daysStuck": 6, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 3880, "name": "Robert & Raquel Jones", "stage": "Lead", "daysStuck": 5, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 3879, "name": "Susan Burk", "stage": "Lead", "daysStuck": 5, "threshold": 1, "agentName": "Tania Hidalgo"}], "calls7d": 89, "appointmentsSet": 2, "showingHomes": 1, "activeListings": 0, "underContract": 0, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 210.0, "stageSamples": {"Nurture": [{"id": 24024, "name": "Julianna Galan", "stage": "Nurture", "lastActivity": "2026-04-07T00:59:59Z"}, {"id": 24023, "name": "Nicole Ponce", "stage": "Nurture", "lastActivity": "2026-04-07T01:42:47Z"}, {"id": 24022, "name": "Tracy Zuehlke", "stage": "Nurture", "lastActivity": "2026-04-07T01:45:01Z"}], "Appointment Set": [{"id": 24012, "name": "Anna & Ed Whelan", "stage": "Appointment Set", "lastActivity": "2026-04-07T01:05:03Z"}, {"id": 24009, "name": "Monica McCarthy", "stage": "Appointment Set", "lastActivity": "2026-04-07T01:23:48Z"}], "Met with Customer": [{"id": 23998, "name": "James Daniels", "stage": "Met with Customer", "lastActivity": "2026-04-05T16:32:41Z"}], "Spoke with Customer": [{"id": 23997, "name": "Curt Griffin", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T18:24:35Z"}, {"id": 23990, "name": "Brenda Melendez", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T18:24:37Z"}, {"id": 23909, "name": "James", "stage": "Spoke with Customer", "lastActivity": "2026-04-03T06:30:44Z"}], "Lead": [{"id": 23963, "name": "Melanie Donovan", "stage": "Lead", "lastActivity": "2026-03-31T15:41:33Z"}, {"id": 23840, "name": "Melody Johns", "stage": "Lead", "lastActivity": "2026-04-06T18:24:38Z"}, {"id": 21053, "name": "Diane & David Boyd", "stage": "Lead", "lastActivity": "2026-03-31T22:21:14Z"}], "Showing Homes": [{"id": 23322, "name": "Cherie Retamozzo", "stage": "Showing Homes", "lastActivity": "2026-04-06T18:25:00Z"}], "Attempted Contact": [{"id": 21030, "name": "Samantha Johnson", "stage": "Attempted Contact", "lastActivity": "2026-04-02T20:57:15Z"}, {"id": 21029, "name": "Mike Beasley", "stage": "Attempted Contact", "lastActivity": "2026-04-06T18:24:36Z"}, {"id": 21028, "name": "Sam Finch", "stage": "Attempted Contact", "lastActivity": "2026-04-04T23:05:41Z"}], "Closed": [{"id": 9884, "name": "Greg Zaccaria", "stage": "Closed", "lastActivity": "2026-04-06T18:24:46Z"}]}, "ucDeals": [], "closedDeals": []}, {"id": 32, "name": "Ashley Huntington", "email": "Ashleyh@thenewcomergroup.com", "totalLeads": 121, "newLeads7d": 5, "stageCounts": {"Spoke with Customer": 10, "Lead": 7, "Attempted Contact": 10, "Appointment Set": 2, "Met with Customer": 9, "Showing Homes": 2, "Listing Agreement": 3, "Under Contract": 3, "Nurture": 74, "Closed": 1}, "needsFollowUp": 5, "stuckLeads": [{"id": 23975, "name": "Adam Zona", "stage": "Lead", "daysStuck": 3, "threshold": 1, "agentName": "Ashley Huntington"}, {"id": 23422, "name": "Jessica Mize", "stage": "Lead", "daysStuck": 20, "threshold": 1, "agentName": "Ashley Huntington"}, {"id": 23355, "name": "Jacob Bolton", "stage": "Lead", "daysStuck": 20, "threshold": 1, "agentName": "Ashley Huntington"}, {"id": 23279, "name": "John Kenna", "stage": "Lead", "daysStuck": 10, "threshold": 1, "agentName": "Ashley Huntington"}, {"id": 23245, "name": "Fl Nikki Alphonse 2820 Oakland Green Cove Springs", "stage": "Lead", "daysStuck": 26, "threshold": 1, "agentName": "Ashley Huntington"}], "calls7d": 6, "appointmentsSet": 2, "showingHomes": 2, "activeListings": 0, "underContract": 4, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 74.5, "stageSamples": {"Spoke with Customer": [{"id": 23996, "name": "Windy Deyton", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T17:59:06Z"}, {"id": 23980, "name": "Isaiah Jackson", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T17:55:05Z"}, {"id": 23886, "name": "Rj Doty", "stage": "Spoke with Customer", "lastActivity": "2026-04-07T10:13:52Z"}], "Lead": [{"id": 23991, "name": "Parker Stuart", "stage": "Lead", "lastActivity": "2026-04-06T20:11:03Z"}, {"id": 23975, "name": "Adam Zona", "stage": "Lead", "lastActivity": "2026-04-04T01:47:32Z"}, {"id": 23422, "name": "Jessica Mize", "stage": "Lead", "lastActivity": "2026-03-17T16:24:26Z"}], "Attempted Contact": [{"id": 23977, "name": "Carrie Blodgett", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:58:57Z"}, {"id": 23854, "name": "Chad Smith", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:55:05Z"}, {"id": 23853, "name": "Emily Mannick", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:55:06Z"}], "Appointment Set": [{"id": 23959, "name": "Pamela Chancy", "stage": "Appointment Set", "lastActivity": "2026-04-01T12:30:07Z"}, {"id": 23958, "name": "Eddie Gonzalez", "stage": "Appointment Set", "lastActivity": "2026-04-06T17:58:56Z"}], "Met with Customer": [{"id": 23944, "name": "Nancy Gladfelter", "stage": "Met with Customer", "lastActivity": "2026-04-06T20:56:15Z"}, {"id": 23818, "name": "Kathryn Ohmen", "stage": "Met with Customer", "lastActivity": "2026-04-06T17:58:58Z"}, {"id": 23459, "name": "George Cunningham", "stage": "Met with Customer", "lastActivity": "2026-04-06T17:59:04Z"}], "Showing Homes": [{"id": 23872, "name": "Jeanette Holbrook", "stage": "Showing Homes", "lastActivity": "2026-04-06T17:59:08Z"}, {"id": 23354, "name": "Shae Morgan", "stage": "Showing Homes", "lastActivity": "2026-04-07T01:44:36Z"}], "Listing Agreement": [{"id": 23867, "name": "Luke Hallowell", "stage": "Listing Agreement", "lastActivity": "2026-04-06T19:35:34Z"}, {"id": 23476, "name": "Rene Feria", "stage": "Listing Agreement", "lastActivity": "2026-03-16T21:37:45Z"}, {"id": 23373, "name": "\"Bobby\" Robert Strileckis", "stage": "Listing Agreement", "lastActivity": "2026-04-07T01:14:00Z"}], "Under Contract": [{"id": 23315, "name": "William Gibson", "stage": "Under Contract", "lastActivity": "2026-04-06T17:59:07Z"}, {"id": 23302, "name": "Joy Allen", "stage": "Under Contract", "lastActivity": "2026-04-06T17:59:38Z"}, {"id": 23202, "name": "Drew Reynolds", "stage": "Under Contract", "lastActivity": "2026-04-07T00:25:15Z"}], "Nurture": [{"id": 23278, "name": "Wesley Miller", "stage": "Nurture", "lastActivity": "2026-04-03T16:18:49Z"}, {"id": 23277, "name": "Teresa Cornelious", "stage": "Nurture", "lastActivity": "2026-04-03T16:18:49Z"}, {"id": 23276, "name": "Amy Strawn", "stage": "Nurture", "lastActivity": "2026-04-03T16:18:49Z"}], "Closed": [{"id": 12139, "name": "Gregory Todd Daniel", "stage": "Closed", "lastActivity": "2026-04-06T17:59:09Z"}]}, "ucDeals": [{"id": 575, "name": "Parker Stuart", "value": 420000, "agentName": "Ashley Huntington"}, {"id": 546, "name": "2966 Swaps Ct, Green Cove Springs, FL 32043", "value": 318000, "agentName": "Ashley Huntington"}, {"id": 540, "name": "Chad Hanson & Jessica Sapiro", "value": 400000, "agentName": "Ashley Huntington"}, {"id": 537, "name": "61 Foxhall Ln", "value": 267000, "agentName": "Ashley Huntington"}], "closedDeals": []}, {"id": 34, "name": "Carson Moree", "email": "carson@thenewcomergroup.com", "totalLeads": 363, "newLeads7d": 5, "stageCounts": {"Spoke with Customer": 5, "Met with Customer": 4, "Attempted Contact": 6, "Nurture": 323, "Submitting Offers": 1, "Lead": 11, "Closed": 11, "Showing Homes": 2}, "needsFollowUp": 0, "stuckLeads": [], "calls7d": 25, "appointmentsSet": 0, "showingHomes": 2, "activeListings": 0, "underContract": 0, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 65.0, "stageSamples": {"Spoke with Customer": [{"id": 24018, "name": "Glenn", "stage": "Spoke with Customer", "lastActivity": "2026-04-07T08:49:03Z"}, {"id": 20994, "name": "Roderick Guile", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T18:00:32Z"}, {"id": 20505, "name": "Imelda Notes", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T18:00:23Z"}], "Met with Customer": [{"id": 23995, "name": "Anastasia", "stage": "Met with Customer", "lastActivity": "2026-04-05T02:56:17Z"}, {"id": 23994, "name": "Holly", "stage": "Met with Customer", "lastActivity": "2026-04-07T00:50:10Z"}, {"id": 23979, "name": "Mark Matreale", "stage": "Met with Customer", "lastActivity": "2026-04-06T14:44:28Z"}], "Attempted Contact": [{"id": 23973, "name": "Thomas Frazzetto", "stage": "Attempted Contact", "lastActivity": "2026-04-06T18:00:46Z"}, {"id": 23835, "name": "James Doucet", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:55:13Z"}, {"id": 23471, "name": "Laura Inman", "stage": "Attempted Contact", "lastActivity": "2026-04-06T18:01:01Z"}], "Nurture": [{"id": 23962, "name": "Joseph George", "stage": "Nurture", "lastActivity": "2026-04-06T18:00:32Z"}, {"id": 23907, "name": "Mike", "stage": "Nurture", "lastActivity": "2026-04-07T11:12:17Z"}, {"id": 23898, "name": "Iain", "stage": "Nurture", "lastActivity": "2026-03-27T15:07:42Z"}], "Submitting Offers": [{"id": 23948, "name": "Ashwin J", "stage": "Submitting Offers", "lastActivity": "2026-04-07T00:48:06Z"}], "Lead": [{"id": 23841, "name": "Emma Zimmerman", "stage": "Lead", "lastActivity": "2026-04-06T17:55:12Z"}, {"id": 15438, "name": "Alexandria Lee Noble", "stage": "Lead", "lastActivity": "2026-04-06T18:01:39Z"}, {"id": 23513, "name": "Rizwana Hussain", "stage": "Lead", "lastActivity": "2026-04-06T18:00:51Z"}], "Closed": [{"id": 23810, "name": "Skyler Brierley", "stage": "Closed", "lastActivity": "2026-04-07T06:31:57Z"}, {"id": 23806, "name": "Phil Dasaro", "stage": "Closed", "lastActivity": "2026-04-06T18:00:30Z"}, {"id": 23582, "name": "Geeta Khatta", "stage": "Closed", "lastActivity": "2026-04-06T18:01:25Z"}], "Showing Homes": [{"id": 23473, "name": "Deborah Cummins", "stage": "Showing Homes", "lastActivity": "2026-04-06T18:01:20Z"}, {"id": 20702, "name": "Diana Angel", "stage": "Showing Homes", "lastActivity": "2026-04-07T02:30:46Z"}]}, "ucDeals": [], "closedDeals": []}, {"id": 28, "name": "Aaron Carn", "email": "aaron@thenewcomergroup.com", "totalLeads": 104, "newLeads7d": 1, "stageCounts": {"Spoke with Customer": 11, "Met with Customer": 6, "Nurture": 51, "Showing Homes": 2, "Appointment Set": 1, "Under Contract": 2, "Closed": 5, "Attempted Contact": 26}, "needsFollowUp": 2, "stuckLeads": [{"id": 21285, "name": "Tony White", "stage": "Attempted Contact", "daysStuck": 115, "threshold": 5, "agentName": "Aaron Carn"}, {"id": 20345, "name": "Schooners Seafood", "stage": "Attempted Contact", "daysStuck": 111, "threshold": 5, "agentName": "Aaron Carn"}], "calls7d": 19, "appointmentsSet": 1, "showingHomes": 2, "activeListings": 0, "underContract": 2, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 65.0, "stageSamples": {"Spoke with Customer": [{"id": 23970, "name": "Catherine Jones", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T17:57:57Z"}, {"id": 23505, "name": "Juliana Magarin", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T17:58:03Z"}, {"id": 23427, "name": "Ladonna", "stage": "Spoke with Customer", "lastActivity": "2026-03-27T15:05:25Z"}], "Met with Customer": [{"id": 23956, "name": "Holly McAlister", "stage": "Met with Customer", "lastActivity": "2026-04-06T17:57:56Z"}, {"id": 23946, "name": "Robert Belcaster", "stage": "Met with Customer", "lastActivity": "2026-04-06T17:57:36Z"}, {"id": 23880, "name": "Charles Pitts", "stage": "Met with Customer", "lastActivity": "2026-04-06T17:58:00Z"}], "Nurture": [{"id": 23863, "name": "Stacey Brooke", "stage": "Nurture", "lastActivity": "2026-04-07T01:42:21Z"}, {"id": 23843, "name": "Mah Pari", "stage": "Nurture", "lastActivity": "2026-04-06T17:58:03Z"}, {"id": 23827, "name": "Jasmine Sledge", "stage": "Nurture", "lastActivity": "2026-04-06T18:38:24Z"}], "Showing Homes": [{"id": 23815, "name": "Deborah Kim", "stage": "Showing Homes", "lastActivity": "2026-04-06T22:28:37Z"}, {"id": 23475, "name": "Aaron Bloch", "stage": "Showing Homes", "lastActivity": "2026-04-06T20:40:04Z"}], "Appointment Set": [{"id": 23379, "name": "Joseph Pileggi", "stage": "Appointment Set", "lastActivity": "2026-04-02T13:51:03Z"}], "Under Contract": [{"id": 23120, "name": "Dustin Diehl", "stage": "Under Contract", "lastActivity": "2026-04-06T21:41:47Z"}, {"id": 23116, "name": "Abigail Vancampenhout", "stage": "Under Contract", "lastActivity": "2026-04-06T19:30:46Z"}], "Closed": [{"id": 22491, "name": "Gail Rowland", "stage": "Closed", "lastActivity": "2026-04-06T17:57:53Z"}, {"id": 22227, "name": "Eric Lajoice", "stage": "Closed", "lastActivity": "2026-03-22T00:58:19Z"}, {"id": 21394, "name": "Gianni Moscardini", "stage": "Closed", "lastActivity": "2026-04-02T20:36:02Z"}], "Attempted Contact": [{"id": 22297, "name": "Kerri Boatright", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:55:02Z"}, {"id": 21285, "name": "Tony White", "stage": "Attempted Contact", "lastActivity": "2025-12-12T15:22:16Z"}, {"id": 20538, "name": "Lindsey Lebhar", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:57:44Z"}]}, "ucDeals": [{"id": 493, "name": "107 Seasons Court", "value": 500000, "agentName": "Aaron Carn"}, {"id": 429, "name": "Dustin Shawn Diehl", "value": 469000, "agentName": "Aaron Carn"}], "closedDeals": []}, {"id": 24, "name": "Jeff Rankin", "email": "jeff@thenewcomergroup.com", "totalLeads": 153, "newLeads7d": 0, "stageCounts": {"Appointment Set": 1, "Under Contract": 2, "Attempted Contact": 40, "Nurture": 99, "Active Listing": 1, "Closed": 4, "Spoke with Customer": 5, "Lead": 1}, "needsFollowUp": 6, "stuckLeads": [{"id": 22225, "name": "Donna Larson", "stage": "Attempted Contact", "daysStuck": 21, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 22194, "name": "Belinda Spradlin", "stage": "Attempted Contact", "daysStuck": 54, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 22192, "name": "Richard Doucette", "stage": "Attempted Contact", "daysStuck": 21, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 22191, "name": "Eric Thompson", "stage": "Attempted Contact", "daysStuck": 110, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 22185, "name": "Katherine Drew", "stage": "Attempted Contact", "daysStuck": 47, "threshold": 5, "agentName": "Jeff Rankin"}], "calls7d": 21, "appointmentsSet": 1, "showingHomes": 0, "activeListings": 1, "underContract": 2, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 64.0, "stageSamples": {"Appointment Set": [{"id": 23887, "name": "Michelle Beale", "stage": "Appointment Set", "lastActivity": "2026-04-07T01:04:29Z"}], "Under Contract": [{"id": 23874, "name": "Heather Flanders", "stage": "Under Contract", "lastActivity": "2026-04-06T22:49:59Z"}, {"id": 22545, "name": "Jesse Melendez", "stage": "Under Contract", "lastActivity": "2026-03-26T20:21:20Z"}], "Attempted Contact": [{"id": 23833, "name": "David Ricci", "stage": "Attempted Contact", "lastActivity": "2026-04-06T18:10:11Z"}, {"id": 22542, "name": "Natalie Federico", "stage": "Attempted Contact", "lastActivity": "2026-04-06T18:10:19Z"}, {"id": 22225, "name": "Donna Larson", "stage": "Attempted Contact", "lastActivity": "2026-03-16T22:48:38Z"}], "Nurture": [{"id": 23430, "name": "Colin Whitehead", "stage": "Nurture", "lastActivity": "2026-04-06T18:10:39Z"}, {"id": 23426, "name": "Raymond Newcomer", "stage": "Nurture", "lastActivity": "2026-04-06T17:55:43Z"}, {"id": 23421, "name": "Bernadette Carrico", "stage": "Nurture", "lastActivity": "2026-04-06T18:10:05Z"}], "Active Listing": [{"id": 23084, "name": "Jonathan Baron", "stage": "Active Listing", "lastActivity": "2026-04-06T18:10:16Z"}], "Closed": [{"id": 22311, "name": "Yue Ting Zhan", "stage": "Closed", "lastActivity": "2026-04-06T18:10:36Z"}, {"id": 17539, "name": "Tim Davis", "stage": "Closed", "lastActivity": "2026-04-06T18:10:02Z"}, {"id": 6458, "name": "Victoria McLeod", "stage": "Closed", "lastActivity": "2026-04-06T18:09:57Z"}], "Spoke with Customer": [{"id": 22088, "name": "Eric Mccants", "stage": "Spoke with Customer", "lastActivity": "2026-01-02T20:27:13Z"}, {"id": 18574, "name": "Kelly LaVoie", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T18:10:01Z"}, {"id": 18363, "name": "Carol Quinn", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T18:10:08Z"}], "Lead": [{"id": 4914, "name": "Don Wiess", "stage": "Lead", "lastActivity": "2026-04-06T18:10:15Z"}]}, "ucDeals": [{"id": 562, "name": "2124 Wood Stork Ave St. Augustine, FL 32084", "value": 479900, "agentName": "Jeff Rankin"}, {"id": 543, "name": "44 Wellstream Ln, Palm Coast, FL 32164", "value": 450000, "agentName": "Jeff Rankin"}], "closedDeals": []}, {"id": 31, "name": "Jacob Reimer", "email": "Jacob@thenewcomergroup.com", "totalLeads": 44, "newLeads7d": 0, "stageCounts": {"Appointment Set": 3, "Spoke with Customer": 9, "Nurture": 15, "Met with Customer": 5, "Attempted Contact": 4, "Under Contract": 1, "Lead": 3, "Closed": 4}, "needsFollowUp": 1, "stuckLeads": [{"id": 21919, "name": "Geo Metwin", "stage": "Attempted Contact", "daysStuck": 31, "threshold": 5, "agentName": "Jacob Reimer"}], "calls7d": 12, "appointmentsSet": 3, "showingHomes": 0, "activeListings": 0, "underContract": 1, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 48.5, "stageSamples": {"Appointment Set": [{"id": 23954, "name": "Dvonne Hernandez", "stage": "Appointment Set", "lastActivity": "2026-04-06T18:09:35Z"}, {"id": 23429, "name": "Meredith Sprague", "stage": "Appointment Set", "lastActivity": "2026-04-06T18:09:38Z"}, {"id": 23326, "name": "Kaden Roberts", "stage": "Appointment Set", "lastActivity": "2026-04-06T18:09:50Z"}], "Spoke with Customer": [{"id": 23942, "name": "Carla Javaruski", "stage": "Spoke with Customer", "lastActivity": "2026-04-07T05:21:50Z"}, {"id": 23452, "name": "Ali Gortemoller", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T18:09:44Z"}, {"id": 23440, "name": "Mildred Garcia", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T20:44:46Z"}], "Nurture": [{"id": 23899, "name": "Kevin", "stage": "Nurture", "lastActivity": "2026-03-27T15:08:40Z"}, {"id": 23460, "name": "Claudia Barnette", "stage": "Nurture", "lastActivity": "2026-04-07T03:49:30Z"}, {"id": 23376, "name": "Catherine Manzella", "stage": "Nurture", "lastActivity": "2026-03-16T17:41:01Z"}], "Met with Customer": [{"id": 23861, "name": "Colten Ries", "stage": "Met with Customer", "lastActivity": "2026-04-06T21:17:08Z"}, {"id": 23852, "name": "Bryan Dannels", "stage": "Met with Customer", "lastActivity": "2026-04-06T20:42:26Z"}, {"id": 23457, "name": "Malory Campbell", "stage": "Met with Customer", "lastActivity": "2026-04-06T20:59:29Z"}], "Attempted Contact": [{"id": 23453, "name": "Ana Kim", "stage": "Attempted Contact", "lastActivity": "2026-04-06T18:09:36Z"}, {"id": 23325, "name": "Catherine Rosal", "stage": "Attempted Contact", "lastActivity": "2026-04-06T23:02:57Z"}, {"id": 21919, "name": "Geo Metwin", "stage": "Attempted Contact", "lastActivity": "2026-03-06T17:48:48Z"}], "Under Contract": [{"id": 23368, "name": "Ryan Phillipi", "stage": "Under Contract", "lastActivity": "2026-04-06T18:10:45Z"}], "Lead": [{"id": 23303, "name": "Scott Moncreiff", "stage": "Lead", "lastActivity": "2026-04-06T18:09:41Z"}, {"id": 16566, "name": "Julie Weller", "stage": "Lead", "lastActivity": "2026-04-06T18:09:50Z"}, {"id": 12606, "name": "Maria Zuluaga", "stage": "Lead", "lastActivity": "2026-04-06T20:46:27Z"}], "Closed": [{"id": 17410, "name": "Morgan Casamassina", "stage": "Closed", "lastActivity": "2026-04-06T20:45:13Z"}, {"id": 12613, "name": "Ashley Kent", "stage": "Closed", "lastActivity": "2026-04-06T18:09:43Z"}, {"id": 5354, "name": "Rich Mouldin", "stage": "Closed", "lastActivity": "2026-04-06T18:09:37Z"}]}, "ucDeals": [{"id": 549, "name": "Ryan Phillipi", "value": 315000, "agentName": "Jacob Reimer"}], "closedDeals": []}, {"id": 25, "name": "Guillermo Bruce", "email": "guillermo@thenewcomergroup.com", "totalLeads": 444, "newLeads7d": 0, "stageCounts": {"Attempted Contact": 58, "Lead": 7, "Submitting Offers": 4, "Under Contract": 1, "Nurture": 245, "Spoke with Customer": 27, "Appointment Set": 7, "Met with Customer": 13, "Showing Homes": 18, "Closed": 59, "Active Listing": 5}, "needsFollowUp": 7, "stuckLeads": [{"id": 23293, "name": "Christine Hughes - Realtor", "stage": "Lead", "daysStuck": 40, "threshold": 1, "agentName": "Guillermo Bruce"}, {"id": 23086, "name": "Gregory Collins", "stage": "Attempted Contact", "daysStuck": 9, "threshold": 5, "agentName": "Guillermo Bruce"}, {"id": 22221, "name": "Joy", "stage": "Appointment Set", "daysStuck": 109, "threshold": 7, "agentName": "Guillermo Bruce"}, {"id": 22137, "name": "Robert Wilbert", "stage": "Appointment Set", "daysStuck": 11, "threshold": 7, "agentName": "Guillermo Bruce"}, {"id": 21969, "name": "Chris James", "stage": "Attempted Contact", "daysStuck": 35, "threshold": 5, "agentName": "Guillermo Bruce"}], "calls7d": 2, "appointmentsSet": 7, "showingHomes": 18, "activeListings": 5, "underContract": 1, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 45.5, "stageSamples": {"Attempted Contact": [{"id": 23965, "name": "Trey Love", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:55:38Z"}, {"id": 23170, "name": "Shivani Patel", "stage": "Attempted Contact", "lastActivity": "2026-04-06T18:08:04Z"}, {"id": 23086, "name": "Gregory Collins", "stage": "Attempted Contact", "lastActivity": "2026-03-28T21:53:44Z"}], "Lead": [{"id": 23293, "name": "Christine Hughes - Realtor", "stage": "Lead", "lastActivity": "2026-02-25T22:07:33Z"}, {"id": 20853, "name": "Alan Epstein", "stage": "Lead", "lastActivity": "2026-04-06T18:08:37Z"}, {"id": 20843, "name": "Paul Ashe", "stage": "Lead", "lastActivity": "2026-04-06T18:08:49Z"}], "Submitting Offers": [{"id": 23287, "name": "Tony & Katrin Clark", "stage": "Submitting Offers", "lastActivity": "2026-04-07T04:27:40Z"}, {"id": 22337, "name": "Claudia Halls", "stage": "Submitting Offers", "lastActivity": "2026-04-07T06:58:14Z"}, {"id": 21480, "name": "Michele Gill", "stage": "Submitting Offers", "lastActivity": "2026-04-06T18:07:26Z"}], "Under Contract": [{"id": 23150, "name": "John & Pat Pelle", "stage": "Under Contract", "lastActivity": "2026-04-06T18:08:29Z"}], "Nurture": [{"id": 23130, "name": "Melahi Pons", "stage": "Nurture", "lastActivity": "2026-03-08T21:52:04Z"}, {"id": 22146, "name": "Mary Watson", "stage": "Nurture", "lastActivity": "2025-12-13T00:26:51Z"}, {"id": 21902, "name": "Melanie C Ridgeway", "stage": "Nurture", "lastActivity": "2026-04-06T18:09:03Z"}], "Spoke with Customer": [{"id": 23097, "name": "Sarah", "stage": "Spoke with Customer", "lastActivity": "2026-02-12T01:22:16Z"}, {"id": 22180, "name": "Ilhan Baysal", "stage": "Spoke with Customer", "lastActivity": "2026-04-05T13:07:40Z"}, {"id": 21876, "name": "Will Santee", "stage": "Spoke with Customer", "lastActivity": "2025-12-13T00:38:57Z"}], "Appointment Set": [{"id": 22394, "name": "Freney", "stage": "Appointment Set", "lastActivity": "2026-04-06T18:08:40Z"}, {"id": 22221, "name": "Joy", "stage": "Appointment Set", "lastActivity": "2025-12-18T15:08:10Z"}, {"id": 22137, "name": "Robert Wilbert", "stage": "Appointment Set", "lastActivity": "2026-03-26T15:07:29Z"}], "Met with Customer": [{"id": 22356, "name": "Jared Evans", "stage": "Met with Customer", "lastActivity": "2026-04-06T18:07:48Z"}, {"id": 22126, "name": "Casey Waldorf", "stage": "Met with Customer", "lastActivity": "2026-04-06T18:08:49Z"}, {"id": 21671, "name": "Steve Garcia", "stage": "Met with Customer", "lastActivity": "2026-03-26T15:07:25Z"}], "Showing Homes": [{"id": 22193, "name": "Colleen & Bob Holtan", "stage": "Showing Homes", "lastActivity": "2026-04-06T18:09:19Z"}, {"id": 22141, "name": "Doyle Eden", "stage": "Showing Homes", "lastActivity": "2026-04-06T18:07:14Z"}, {"id": 21301, "name": "Lori Summers", "stage": "Showing Homes", "lastActivity": "2026-03-24T00:55:16Z"}], "Closed": [{"id": 21447, "name": "Jennifer Morneau", "stage": "Closed", "lastActivity": "2026-04-06T17:55:42Z"}, {"id": 21102, "name": "Jason Sizemore", "stage": "Closed", "lastActivity": "2026-04-06T18:08:46Z"}, {"id": 21296, "name": "Josh Martin", "stage": "Closed", "lastActivity": "2026-03-22T19:30:12Z"}], "Active Listing": [{"id": 17607, "name": "Della & Kevin Oneill", "stage": "Active Listing", "lastActivity": "2026-04-06T18:07:25Z"}, {"id": 17278, "name": "Amy & Dany Pruett", "stage": "Active Listing", "lastActivity": "2026-04-06T18:08:24Z"}, {"id": 16126, "name": "Ronald Clemmer", "stage": "Active Listing", "lastActivity": "2026-04-06T18:07:52Z"}]}, "ucDeals": [{"id": 525, "name": "John & Patricia Pelle", "value": 425000, "agentName": "Guillermo Bruce"}], "closedDeals": []}, {"id": 29, "name": "Alanna O'Rourke", "email": "alanna@thenewcomergroup.com", "totalLeads": 187, "newLeads7d": 1, "stageCounts": {"Attempted Contact": 80, "Nurture": 45, "Spoke with Customer": 49, "Met with Customer": 2, "Lead": 6, "Closed": 5}, "needsFollowUp": 27, "stuckLeads": [{"id": 22523, "name": "Virgina Lanou", "stage": "Lead", "daysStuck": 69, "threshold": 1, "agentName": "Alanna O'Rourke"}, {"id": 22229, "name": "Unknown Unknown", "stage": "Attempted Contact", "daysStuck": 69, "threshold": 5, "agentName": "Alanna O'Rourke"}, {"id": 21505, "name": "Sheryl Alexander - Trustee", "stage": "Attempted Contact", "daysStuck": 21, "threshold": 5, "agentName": "Alanna O'Rourke"}, {"id": 21484, "name": "Sheila Matters", "stage": "Attempted Contact", "daysStuck": 21, "threshold": 5, "agentName": "Alanna O'Rourke"}, {"id": 21481, "name": "Emily Dont Know", "stage": "Attempted Contact", "daysStuck": 69, "threshold": 5, "agentName": "Alanna O'Rourke"}], "calls7d": 20, "appointmentsSet": 0, "showingHomes": 0, "activeListings": 0, "underContract": 0, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 29.5, "stageSamples": {"Attempted Contact": [{"id": 23976, "name": "Serenity Stevens", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:55:03Z"}, {"id": 22541, "name": "Tom Hartmann", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:58:13Z"}, {"id": 22513, "name": "Shantisha", "stage": "Attempted Contact", "lastActivity": "2026-04-06T17:58:06Z"}], "Nurture": [{"id": 23896, "name": "Christian", "stage": "Nurture", "lastActivity": "2026-03-27T15:05:17Z"}, {"id": 23465, "name": "Nick Santos", "stage": "Nurture", "lastActivity": "2026-04-03T16:18:48Z"}, {"id": 23094, "name": "Alanna ORourke", "stage": "Nurture", "lastActivity": "2026-04-06T17:55:04Z"}], "Spoke with Customer": [{"id": 23875, "name": "Nina Randall", "stage": "Spoke with Customer", "lastActivity": "2026-04-03T06:10:43Z"}, {"id": 23837, "name": "Sammi Pine", "stage": "Spoke with Customer", "lastActivity": "2026-04-03T06:10:43Z"}, {"id": 23166, "name": "Ricardo De Marchi", "stage": "Spoke with Customer", "lastActivity": "2026-04-06T17:58:32Z"}], "Met with Customer": [{"id": 23859, "name": "Alyssa Goodman", "stage": "Met with Customer", "lastActivity": "2026-04-03T06:10:43Z"}, {"id": 23858, "name": "Abraham & Morgan Smith", "stage": "Met with Customer", "lastActivity": "2026-04-03T06:10:43Z"}], "Lead": [{"id": 23102, "name": "Gabe Smith", "stage": "Lead", "lastActivity": "2026-04-06T17:55:04Z"}, {"id": 22523, "name": "Virgina Lanou", "stage": "Lead", "lastActivity": "2026-01-27T17:57:25Z"}, {"id": 20036, "name": "Lisa Romanelli", "stage": "Lead", "lastActivity": "2026-04-06T17:58:11Z"}], "Closed": [{"id": 20554, "name": "Max Milchman", "stage": "Closed", "lastActivity": "2026-04-06T17:58:27Z"}, {"id": 19716, "name": "Gustavo Michel", "stage": "Closed", "lastActivity": "2026-04-06T17:58:28Z"}, {"id": 17015, "name": "Samantha Wynns", "stage": "Closed", "lastActivity": "2026-04-06T17:58:39Z"}]}, "ucDeals": [], "closedDeals": []}, {"id": 35, "name": "Marvin Davis", "email": "marvin@thenewcomergroup.com", "totalLeads": 28, "newLeads7d": 0, "stageCounts": {"Appointment Set": 1, "Nurture": 21, "Spoke with Customer": 3, "Met with Customer": 1, "Attempted Contact": 2}, "needsFollowUp": 2, "stuckLeads": [{"id": 23468, "name": "Teresa Austin", "stage": "Attempted Contact", "daysStuck": 20, "threshold": 5, "agentName": "Marvin Davis"}, {"id": 23437, "name": "Tylor Johnson", "stage": "Attempted Contact", "daysStuck": 20, "threshold": 5, "agentName": "Marvin Davis"}], "calls7d": 0, "appointmentsSet": 1, "showingHomes": 0, "activeListings": 0, "underContract": 0, "closedThisMonth": 0, "upcomingTasks": 0, "taskDetails": [], "healthScore": 4.0, "stageSamples": {"Appointment Set": [{"id": 23964, "name": "Alisa Griffin", "stage": "Appointment Set", "lastActivity": "2026-04-06T18:12:32Z"}], "Nurture": [{"id": 23906, "name": "Gary", "stage": "Nurture", "lastActivity": "2026-03-27T15:13:40Z"}, {"id": 23905, "name": "Nicole", "stage": "Nurture", "lastActivity": "2026-03-27T15:13:15Z"}, {"id": 23904, "name": "Hunter", "stage": "Nurture", "lastActivity": "2026-03-27T15:11:32Z"}], "Spoke with Customer": [{"id": 23499, "name": "Courtney Yearwood", "stage": "Spoke with Customer", "lastActivity": "2026-03-31T13:41:50Z"}, {"id": 23498, "name": "Damian Bell", "stage": "Spoke with Customer", "lastActivity": "2026-03-20T15:26:16Z"}, {"id": 23486, "name": "David From Pickleball", "stage": "Spoke with Customer", "lastActivity": "2026-03-31T14:05:02Z"}], "Met with Customer": [{"id": 23469, "name": "Steve Wagner", "stage": "Met with Customer", "lastActivity": "2026-03-17T17:22:49Z"}], "Attempted Contact": [{"id": 23468, "name": "Teresa Austin", "stage": "Attempted Contact", "lastActivity": "2026-03-17T16:56:57Z"}, {"id": 23437, "name": "Tylor Johnson", "stage": "Attempted Contact", "lastActivity": "2026-03-17T16:47:48Z"}]}, "ucDeals": [], "closedDeals": []}], "funnel": [{"stage": "Lead", "count": 51}, {"stage": "Attempted Contact", "count": 240}, {"stage": "Spoke with Customer", "count": 129}, {"stage": "Appointment Set", "count": 17}, {"stage": "Met with Customer", "count": 41}, {"stage": "Showing Homes", "count": 25}, {"stage": "Submitting Offers", "count": 5}, {"stage": "Under Contract", "count": 9}, {"stage": "Listing Agreement", "count": 3}, {"stage": "Active Listing", "count": 6}, {"stage": "Closed", "count": 90}, {"stage": "Nurture", "count": 942}], "ucDeals": [{"id": 575, "name": "Parker Stuart", "value": 420000, "agentName": "Ashley Huntington"}, {"id": 546, "name": "2966 Swaps Ct, Green Cove Springs, FL 32043", "value": 318000, "agentName": "Ashley Huntington"}, {"id": 540, "name": "Chad Hanson & Jessica Sapiro", "value": 400000, "agentName": "Ashley Huntington"}, {"id": 537, "name": "61 Foxhall Ln", "value": 267000, "agentName": "Ashley Huntington"}, {"id": 493, "name": "107 Seasons Court", "value": 500000, "agentName": "Aaron Carn"}, {"id": 429, "name": "Dustin Shawn Diehl", "value": 469000, "agentName": "Aaron Carn"}, {"id": 562, "name": "2124 Wood Stork Ave St. Augustine, FL 32084", "value": 479900, "agentName": "Jeff Rankin"}, {"id": 543, "name": "44 Wellstream Ln, Palm Coast, FL 32164", "value": 450000, "agentName": "Jeff Rankin"}, {"id": 549, "name": "Ryan Phillipi", "value": 315000, "agentName": "Jacob Reimer"}, {"id": 525, "name": "John & Patricia Pelle", "value": 425000, "agentName": "Guillermo Bruce"}], "stuckLeads": [{"id": 21285, "name": "Tony White", "stage": "Attempted Contact", "daysStuck": 115, "threshold": 5, "agentName": "Aaron Carn"}, {"id": 20345, "name": "Schooners Seafood", "stage": "Attempted Contact", "daysStuck": 111, "threshold": 5, "agentName": "Aaron Carn"}, {"id": 22191, "name": "Eric Thompson", "stage": "Attempted Contact", "daysStuck": 110, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 22221, "name": "Joy", "stage": "Appointment Set", "daysStuck": 109, "threshold": 7, "agentName": "Guillermo Bruce"}, {"id": 22523, "name": "Virgina Lanou", "stage": "Lead", "daysStuck": 69, "threshold": 1, "agentName": "Alanna O'Rourke"}, {"id": 22229, "name": "Unknown Unknown", "stage": "Attempted Contact", "daysStuck": 69, "threshold": 5, "agentName": "Alanna O'Rourke"}, {"id": 21481, "name": "Emily Dont Know", "stage": "Attempted Contact", "daysStuck": 69, "threshold": 5, "agentName": "Alanna O'Rourke"}, {"id": 22194, "name": "Belinda Spradlin", "stage": "Attempted Contact", "daysStuck": 54, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 22185, "name": "Katherine Drew", "stage": "Attempted Contact", "daysStuck": 47, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 23293, "name": "Christine Hughes - Realtor", "stage": "Lead", "daysStuck": 40, "threshold": 1, "agentName": "Guillermo Bruce"}, {"id": 21969, "name": "Chris James", "stage": "Attempted Contact", "daysStuck": 35, "threshold": 5, "agentName": "Guillermo Bruce"}, {"id": 21919, "name": "Geo Metwin", "stage": "Attempted Contact", "daysStuck": 31, "threshold": 5, "agentName": "Jacob Reimer"}, {"id": 23245, "name": "Fl Nikki Alphonse 2820 Oakland Green Cove Springs", "stage": "Lead", "daysStuck": 26, "threshold": 1, "agentName": "Ashley Huntington"}, {"id": 22225, "name": "Donna Larson", "stage": "Attempted Contact", "daysStuck": 21, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 22192, "name": "Richard Doucette", "stage": "Attempted Contact", "daysStuck": 21, "threshold": 5, "agentName": "Jeff Rankin"}, {"id": 21505, "name": "Sheryl Alexander - Trustee", "stage": "Attempted Contact", "daysStuck": 21, "threshold": 5, "agentName": "Alanna O'Rourke"}, {"id": 21484, "name": "Sheila Matters", "stage": "Attempted Contact", "daysStuck": 21, "threshold": 5, "agentName": "Alanna O'Rourke"}, {"id": 23422, "name": "Jessica Mize", "stage": "Lead", "daysStuck": 20, "threshold": 1, "agentName": "Ashley Huntington"}, {"id": 23355, "name": "Jacob Bolton", "stage": "Lead", "daysStuck": 20, "threshold": 1, "agentName": "Ashley Huntington"}, {"id": 23468, "name": "Teresa Austin", "stage": "Attempted Contact", "daysStuck": 20, "threshold": 5, "agentName": "Marvin Davis"}, {"id": 23437, "name": "Tylor Johnson", "stage": "Attempted Contact", "daysStuck": 20, "threshold": 5, "agentName": "Marvin Davis"}, {"id": 22137, "name": "Robert Wilbert", "stage": "Appointment Set", "daysStuck": 11, "threshold": 7, "agentName": "Guillermo Bruce"}, {"id": 23279, "name": "John Kenna", "stage": "Lead", "daysStuck": 10, "threshold": 1, "agentName": "Ashley Huntington"}, {"id": 23086, "name": "Gregory Collins", "stage": "Attempted Contact", "daysStuck": 9, "threshold": 5, "agentName": "Guillermo Bruce"}, {"id": 23963, "name": "Melanie Donovan", "stage": "Lead", "daysStuck": 6, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 21053, "name": "Diane & David Boyd", "stage": "Lead", "daysStuck": 6, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 21040, "name": "Jeremy Mcintyre", "stage": "Lead", "daysStuck": 6, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 3880, "name": "Robert & Raquel Jones", "stage": "Lead", "daysStuck": 5, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 3879, "name": "Susan Burk", "stage": "Lead", "daysStuck": 5, "threshold": 1, "agentName": "Tania Hidalgo"}, {"id": 23975, "name": "Adam Zona", "stage": "Lead", "daysStuck": 3, "threshold": 1, "agentName": "Ashley Huntington"}], "generated": "2026-04-07T11:12:32.959123", "dateRange": "2026-03-31 to 2026-04-07", "thresholds": {"Lead": 1, "Attempted Contact": 5, "Spoke": 7, "Appointment Set": 7, "Met": 14, "Showing Homes": 30, "Submitting Offers": 21}, "dateDisplay": "Tuesday, April 07, 2026"};
 
-function toggleDetail(agentId) {
-  const panel = document.getElementById('detail-' + agentId);
-  if (panel) { panel.classList.toggle('open'); event.stopPropagation(); }
-}
-
-function filterAgents() {
-  const q = document.getElementById('agentSearch').value.toLowerCase();
-  document.querySelectorAll('.agent-card').forEach(card => {
-    card.style.display = (card.dataset.agent || '').includes(q) ? '' : 'none';
+// Tabs
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
   });
+});
+
+// Date
+document.getElementById('dateDisplay').textContent = D.dateDisplay;
+document.getElementById('dataRange').textContent = 'Data: ' + D.dateRange;
+
+// Health tier
+function tier(s) {
+  if (s >= 80) return {label:'Strong',color:'#27AE60',bg:'rgba(39,174,96,0.15)'};
+  if (s >= 40) return {label:'Steady',color:'#E67E22',bg:'rgba(230,126,34,0.15)'};
+  return {label:'At Risk',color:'#C0392B',bg:'rgba(192,57,43,0.15)'};
 }
 
-function sortAgents() {
-  const by = document.getElementById('agentSort').value;
-  const grid = document.getElementById('agentGrid');
-  const cards = Array.from(grid.children);
-  cards.sort((a, b) => parseInt(b.dataset[by] || 0) - parseInt(a.dataset[by] || 0));
-  cards.forEach(c => grid.appendChild(c));
+// KPIs
+const kpis = [
+  {label:'Active Agents', value:D.summary.totalAgents},
+  {label:'Total Pipeline', value:D.summary.totalPipeline.toLocaleString()},
+  {label:'New Leads (7d)', value:D.summary.newLeads7d},
+  {label:'Calls (7d)', value:D.summary.totalCalls7d},
+  {label:'Under Contract', value:D.summary.underContract},
+  {label:'Closed This Month', value:D.summary.closedThisMonth},
+  {label:'Needs Follow-Up', value:D.summary.needsFollowUp},
+];
+document.getElementById('kpiGrid').innerHTML = kpis.map(k => `
+  <div class="kpi-card">
+    <div class="kpi-value">${k.value}</div>
+    <div class="kpi-label">${k.label}</div>
+  </div>
+`).join('');
+
+// Funnel
+function buildFunnel(containerId) {
+  const max = Math.max(...D.funnel.map(f=>f.count),1);
+  document.getElementById(containerId).innerHTML = D.funnel.map(f => `
+    <div class="funnel-row">
+      <div class="funnel-label">${f.stage}</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar" style="width:${Math.max((f.count/max)*100,3)}%">
+          <span class="funnel-count">${f.count}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
+buildFunnel('funnelChart');
+buildFunnel('funnelChart2');
+
+// Agent comparison table
+document.getElementById('agentTableBody').innerHTML = D.agents.map(a => {
+  const t = tier(a.healthScore);
+  return `<tr>
+    <td style="font-weight:600">${a.name}</td>
+    <td><span class="health-badge" style="color:${t.color};background:${t.bg}">${a.healthScore} &middot; ${t.label}</span></td>
+    <td>${a.totalLeads}</td>
+    <td>${a.newLeads7d}</td>
+    <td>${a.calls7d}</td>
+    <td>${a.appointmentsSet}</td>
+    <td>${a.showingHomes}</td>
+    <td>${a.underContract}</td>
+    <td style="color:${a.needsFollowUp > 10 ? '#C0392B' : a.needsFollowUp > 5 ? '#E67E22' : '#27AE60'}">${a.needsFollowUp}</td>
+  </tr>`;
+}).join('');
+
+// Scorecards
+function renderScorecards(agentList) {
+  document.getElementById('scorecardGrid').innerHTML = agentList.map(a => {
+    const t = tier(a.healthScore);
+    const stuckHtml = (a.stuckLeads||[]).map(s => `
+      <div class="stuck-item">
+        <span><a href="https://thenewcomergroup.followupboss.com/2/people/view/${s.id}" target="_blank" style="color:var(--teal-light);text-decoration:none">${s.name}</a> &mdash; ${s.stage}</span>
+        <span class="stuck-days">${s.daysStuck}d stuck</span>
+      </div>
+    `).join('');
+    const stages = Object.entries(a.stageCounts||{}).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.82rem;border-bottom:1px solid rgba(17,144,144,0.06)"><span style="color:var(--text-secondary)">${k}</span><span style="font-weight:600">${v}</span></div>`).join('');
+    return `<div class="scorecard" onclick="this.classList.toggle('open')">
+      <div class="scorecard-header">
+        <div>
+          <div class="scorecard-name">${a.name}</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">${a.totalLeads} leads &middot; ${a.calls7d} calls this week</div>
+        </div>
+        <div class="scorecard-score" style="color:${t.color}">${a.healthScore}</div>
+      </div>
+      <div class="scorecard-body">
+        <div class="sc-stats">
+          <div class="sc-stat"><div class="sc-stat-val">${a.newLeads7d}</div><div class="sc-stat-label">New Leads</div></div>
+          <div class="sc-stat"><div class="sc-stat-val">${a.calls7d}</div><div class="sc-stat-label">Calls</div></div>
+          <div class="sc-stat"><div class="sc-stat-val">${a.appointmentsSet}</div><div class="sc-stat-label">Appts Set</div></div>
+          <div class="sc-stat"><div class="sc-stat-val">${a.showingHomes}</div><div class="sc-stat-label">Showing</div></div>
+          <div class="sc-stat"><div class="sc-stat-val">${a.underContract}</div><div class="sc-stat-label">Under Contract</div></div>
+          <div class="sc-stat"><div class="sc-stat-val" style="color:${a.needsFollowUp > 10 ? '#C0392B' : '#E67E22'}">${a.needsFollowUp}</div><div class="sc-stat-label">Needs F/U</div></div>
+        </div>
+        <div style="font-weight:600;margin-bottom:8px;font-size:0.85rem">Stage Breakdown</div>
+        ${stages}
+        ${(a.stuckLeads||[]).length ? '<div style="font-weight:600;margin:12px 0 8px;font-size:0.85rem;color:var(--red)">Stuck Leads</div>' + stuckHtml : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+renderScorecards(D.agents);
+
+// Scorecard search & sort
+document.getElementById('scSearch').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  const filtered = D.agents.filter(a => a.name.toLowerCase().includes(q));
+  renderScorecards(filtered);
+});
+document.getElementById('scSort').addEventListener('change', e => {
+  const sorted = [...D.agents];
+  switch(e.target.value) {
+    case 'health': sorted.sort((a,b)=>b.healthScore-a.healthScore); break;
+    case 'leads': sorted.sort((a,b)=>b.totalLeads-a.totalLeads); break;
+    case 'calls': sorted.sort((a,b)=>b.calls7d-a.calls7d); break;
+    case 'name': sorted.sort((a,b)=>a.name.localeCompare(b.name)); break;
+  }
+  renderScorecards(sorted);
+});
+
+// UC Deals
+document.getElementById('ucDealList').innerHTML = D.ucDeals.length ? D.ucDeals.map(d => `
+  <div class="deal-item">
+    <div>
+      <div class="deal-name">${d.name || 'Unnamed Deal'}</div>
+      <div class="deal-agent">${d.agentName}</div>
+    </div>
+    <div class="deal-value">${d.value ? '$'+Number(d.value).toLocaleString() : ''}</div>
+  </div>
+`).join('') : '<div style="color:var(--text-muted);padding:20px;text-align:center">No deals currently under contract</div>';
+
+// Stuck leads
+document.getElementById('stuckLeadList').innerHTML = D.stuckLeads.length ? D.stuckLeads.map(s => `
+  <div class="stuck-item" style="margin:6px 0">
+    <span>
+      <a href="https://thenewcomergroup.followupboss.com/2/people/view/${s.id}" target="_blank" style="color:var(--teal-light);text-decoration:none">${s.name}</a>
+      &mdash; ${s.stage} &mdash; <span style="color:var(--text-muted)">${s.agentName}</span>
+    </span>
+    <span class="stuck-days">${s.daysStuck}d (threshold: ${s.threshold}d)</span>
+  </div>
+`).join('') : '<div style="color:var(--text-muted);padding:20px;text-align:center">No stuck leads detected</div>';
+
+// Activity bars
+function buildBars(containerId, agents, key, label) {
+  const max = Math.max(...agents.map(a=>a[key]),1);
+  document.getElementById(containerId).innerHTML = agents.map(a => {
+    const h = Math.max((a[key]/max)*160,4);
+    const firstName = a.name.split(' ')[0];
+    return `<div class="bar-col">
+      <div class="bar-value">${a[key]}</div>
+      <div class="bar" style="height:${h}px"></div>
+      <div class="bar-label">${firstName}</div>
+    </div>`;
+  }).join('');
+}
+buildBars('callBars', D.agents, 'calls7d');
+buildBars('leadBars', D.agents, 'newLeads7d');
+
+// Rankings
+document.getElementById('rankingBody').innerHTML = D.agents.map((a,i) => {
+  const t = tier(a.healthScore);
+  return `<tr>
+    <td class="rank-num">${i+1}</td>
+    <td style="font-weight:600">${a.name}</td>
+    <td><span class="health-badge" style="color:${t.color};background:${t.bg}">${a.healthScore}</span></td>
+    <td>${a.calls7d}</td>
+    <td>${a.newLeads7d}</td>
+    <td>${a.underContract}</td>
+    <td>${a.needsFollowUp}</td>
+  </tr>`;
+}).join('');
+
+// Action items
+const actions = [];
+D.agents.forEach(a => {
+  if (a.healthScore < 20) actions.push({text: `${a.name} has a critical health score of ${a.healthScore} — schedule 1:1 coaching session immediately`, cls:'urgent'});
+  else if (a.healthScore < 40) actions.push({text: `${a.name} is At Risk (health: ${a.healthScore}) — review activity and set daily call targets`, cls:'warning'});
+  if (a.needsFollowUp > 20) actions.push({text: `${a.name} has ${a.needsFollowUp} leads needing follow-up — audit lead management process`, cls:'urgent'});
+  if (a.calls7d === 0 && a.totalLeads > 0) actions.push({text: `${a.name} made 0 calls this week with ${a.totalLeads} assigned leads — address immediately`, cls:'urgent'});
+});
+if (D.summary.needsFollowUp > 40) actions.push({text: `Team-wide: ${D.summary.needsFollowUp} leads need follow-up across the team — consider a power hour`, cls:'warning'});
+if (actions.length === 0) actions.push({text: 'No critical action items — team is performing within expected ranges', cls:''});
+
+document.getElementById('actionList').innerHTML = actions.map(a => `
+  <div class="action-item ${a.cls}">${a.text}</div>
+`).join('');
 </script>
+
 </body>
 </html>
