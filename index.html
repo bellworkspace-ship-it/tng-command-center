@@ -825,7 +825,7 @@ function renderScorecards() {
     const card = document.createElement('div');
     card.className = 'scorecard';
     const leads = currentSource === 'all' ? a.totalLeads : a._filteredLeads;
-    let headerHTML = '<div class="scorecard-header" onclick="this.parentElement.classList.toggle('expanded')">' +
+    let headerHTML = '<div class="scorecard-header" onclick="this.parentElement.classList.toggle(&quot;expanded&quot;)">' +
       '<div style="display:flex;align-items:center;gap:12px;"><span class="scorecard-name">' + a.name + '</span>' + healthBadge(a.healthScore) + '</div>' +
       '<div class="scorecard-stats">' +
         '<div class="scorecard-stat"><div class="scorecard-stat-val">' + leads + '</div><div class="scorecard-stat-label">Leads</div></div>' +
