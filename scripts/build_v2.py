@@ -241,9 +241,7 @@ function metrics(aid,dates){
             appts:sumA(aid,"a",dates), tasks:sumA(aid,"t",dates) };
   m.gci=gciClosed(aid,dates); m.pending=pendingGci(aid); m.closedDeals=dealsClosedIn(aid,dates);
   const b=AGI[aid].book; m.book=b.total; m.active=b.active;
-  const dn=dates.length;
-  const touched = dn<=7?b.touched7 : dn<=30?b.touched30 : b.touched90;
-  m.touch = b.active? Math.min(100,100*touched/b.active) : 0;
+  m.touch = b.active? Math.min(100,100*b.touched30/b.active) : 0;  // fixed 30-day coverage window
   m.effortRaw = m.calls + m.conn*1.5 + m.appts*8 + m.tasks*2;
   return m;
 }
@@ -363,7 +361,7 @@ function renderScoreboard(dates,prev){
       <td class="num">${fmt(m.calls)}</td>
       <td class="num">${fmt(m.conn)}</td>
       <td class="num">${fmt(m.appts)}</td>
-      <td><div class="heat" title="${pct(m.touch)} of active book touched"><i style="width:${Math.min(100,m.touch)}%;background:${m.touch>=60?GREEN:m.touch>=35?AMBER:RED}"></i></div><span class="mini">${pct(m.touch)}</span></td>
+      <td><div class="heat" title="${pct(m.touch)} of their working book has logged activity in the last 30 days (calls, texts, emails incl. automated)"><i style="width:${Math.min(100,m.touch)}%;background:${m.touch>=60?GREEN:m.touch>=35?AMBER:RED}"></i></div><span class="mini">${pct(m.touch)}</span></td>
       <td class="num money">${moneyK(m.gci)}</td>
       <td class="num mini">${moneyK(m.pending)}</td>
       <td class="num">${fmt(m.active)}</td>
@@ -376,9 +374,17 @@ function renderScoreboard(dates,prev){
     <div class="card" style="padding:6px 6px 2px;overflow-x:auto">
       <table id="scoretab"><thead><tr>
         <th></th>${hd("name","Agent",0)}${hd("newLeads","New Leads")}${hd("calls","Calls")}${hd("conn","Convos")}
-        ${hd("appts","Appts")}${hd("touch","Book Touch",0)}${hd("gci","GCI Closed")}${hd("pending","Pending GCI")}
+        ${hd("appts","Appts")}${hd("touch","Coverage 30d",0)}${hd("gci","GCI Closed")}${hd("pending","Pending GCI")}
         ${hd("book","Working Book")}${hd("effort","Effort",0)}
       </tr></thead><tbody>${body}</tbody></table>
+    </div>
+    <div class="card" style="margin-top:14px;padding:14px 18px">
+      <div class="mini" style="line-height:1.7"><b>How to read this:</b>
+      <b>New Leads</b> = leads assigned in the window · <b>Calls</b> = outbound dials · <b>Convos</b> = calls connected &gt;10s ·
+      <b>Appts</b> = appointments created · <b>Coverage 30d</b> = share of the working book with any logged activity in the last 30 days (fixed window — doesn't change with the time-frame selector; automated drips count, so low numbers are a real red flag) ·
+      <b>GCI Closed</b> = commission on deals closed inside the window · <b>Pending GCI</b> = commission on current under-contract deals (point-in-time) ·
+      <b>Working Book</b> = leads in actionable stages today (Lead → Under Contract; nurture &amp; closed excluded) ·
+      <b>Effort</b> = calls + 1.5×convos + 8×appts + 2×tasks done, scaled so the top agent in the window = 100.</div>
     </div>
     <div class="grid two" style="margin-top:20px">
       <div class="card">
@@ -396,8 +402,8 @@ function renderScoreboard(dates,prev){
         </div>
         <div class="chartbox tall"><canvas id="scoreBar"></canvas></div>
       </div>
-      <div class="card"><h2 class="sec serif" style="font-size:20px;margin:0 0 4px">Effort vs. Results</h2>
-        <div class="sub">X: effort score · Y: GCI closed (${range}) · bubble: pending GCI</div>
+      <div class="card"><h2 class="sec serif" style="font-size:20px;margin:0 0 4px">Does the effort pay? <span class="mini" style="font-size:12px">(follows the selector ←)</span></h2>
+        <div class="sub">X: <b>${({effort:"effort score",calls:"outbound calls",conn:"conversations",appts:"appointments",newLeads:"new leads",gci:"effort score",touch:"coverage 30d %"})[scoreMetric]}</b> · Y: GCI closed (${range}) · bubble size: pending GCI</div>
         <div class="chartbox tall"><canvas id="scatter"></canvas></div></div>
     </div>`;
 
@@ -410,13 +416,15 @@ function renderScoreboard(dates,prev){
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>scoreMetric==="gci"?moneyK(c.raw):fmt(c.raw)}}},
       scales:{x:{...softGrid,title:ax($("#plotMetric")?$("#plotMetric").selectedOptions[0].text.toUpperCase():"")},y:{...gridless,title:ax("AGENT")}}}});
 
+  const xKey=scoreMetric==="gci"?"effort":scoreMetric;
+  const xLbl=({effort:"EFFORT SCORE",calls:"OUTBOUND CALLS",conn:"CONVERSATIONS",appts:"APPOINTMENTS",newLeads:"NEW LEADS",touch:"COVERAGE 30D %"})[xKey]||"EFFORT";
   mkChart($("#scatter"),{type:"bubble",
     data:{datasets:rows.map((r,i)=>({label:r.a.name,
-      data:[{x:r.m.effort,y:r.m.gci,r:Math.max(4,Math.sqrt(r.m.pending)/40)}],
+      data:[{x:Math.round(r.m[xKey]||0),y:r.m.gci,r:Math.max(4,Math.sqrt(r.m.pending)/40)}],
       backgroundColor:PALETTE[i%PALETTE.length]+"cc"}))},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: effort ${c.raw.x}, GCI ${moneyK(c.raw.y)}, pending ${moneyK(rows.find(r=>r.a.name===c.dataset.label).m.pending)}`}}},
-      scales:{x:{title:{display:true,text:"EFFORT",font:{size:9}},...softGrid},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${xLbl.toLowerCase()} ${fmt(c.raw.x)}, GCI ${moneyK(c.raw.y)}, pending ${moneyK(rows.find(r=>r.a.name===c.dataset.label).m.pending)}`}}},
+      scales:{x:{title:{display:true,text:xLbl,font:{size:9}},...softGrid},
               y:{title:{display:true,text:"GCI CLOSED",font:{size:9}},...softGrid,ticks:{callback:v=>moneyK(v)}}}}});
 }
 function setSort(k){ if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=-1;} render(); }
@@ -847,7 +855,7 @@ function renderAgents(dates,prev){
       </div>
       <div style="margin-top:12px">${spark(sp)}</div>
       <div class="mini" style="display:flex;justify-content:space-between;margin-top:6px">
-        <span>Touch ${pct(m.touch)}</span><span>Pending ${moneyK(m.pending)}</span></div>
+        <span>Coverage 30d ${pct(m.touch)}</span><span>Pending ${moneyK(m.pending)}</span></div>
     </div>`;}).join("");
   $("#p-agents").innerHTML=`
     <h2 class="sec">Agent Books of Business</h2>
@@ -886,7 +894,7 @@ function renderAgentDetail(id,dates,prev){
       ${kpi("Outbound Calls",fmt(m.calls),delta(m.calls,mp.calls))}
       ${kpi("Conversations",fmt(m.conn),delta(m.conn,mp.conn))}
       ${kpi("Appointments",fmt(m.appts),delta(m.appts,mp.appts))}
-      ${kpi("Book Touch",pct(m.touch),`<span class="delta fl">of ${fmt(m.active)} working leads</span>`)}
+      ${kpi("Coverage 30d",pct(m.touch),`<span class="delta fl">of ${fmt(m.active)} working leads touched in last 30 days</span>`)}
       ${kpi("GCI Closed",moneyK(m.gci),delta(m.gci,mp.gci))}
       ${kpi("Pending GCI",moneyK(m.pending),`<span class="delta fl">${pendA.length} under contract</span>`)}
     </div>
