@@ -22,7 +22,7 @@ DWELL = {"Lead": 1, "Attempted Contact": 5, "Spoke with Customer": 7,
 def bucket_of(src):
     s = (src or "").lower()
     if "open house" in s or "openhouse" in s: return "agent"
-    if "agent lead" in s or "agentlead" in s: return "agent"
+    if "agent lead" in s or "agentlead" in s or s == "agent": return "agent"
     if "import" in s: return "recruiting"
     return "company"
 
