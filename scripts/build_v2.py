@@ -702,9 +702,11 @@ function renderPlans(){
       }
       if(t.kind==="dials"&&a){
         const days=[]; const today=new Date(dstr(NOW)+"T00:00:00Z");
+        const officeDays=(t.officeDays&&t.officeDays.length)?t.officeDays:[1,2,3,4,5];
+        const DOWN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+        const odLbl=DOWN[officeDays[0]]+"–"+DOWN[officeDays[officeDays.length-1]];
         for(let d=new Date(start);d<=today&&d<end;d=new Date(d.getTime()+DAY)){
-          const dow=d.getUTCDay();
-          if(dow>=1&&dow<=5) days.push(dstr(d));
+          if(officeDays.includes(d.getUTCDay())) days.push(dstr(d));
         }
         const s=DATA.series[a.id]||{};
         const vals=days.map(dd=>(s[dd]&&s[dd].c)||0);
@@ -715,7 +717,7 @@ function renderPlans(){
         const badge=ok==null?'<span class="badge b-grey">EARLY DAYS</span>':ok?'<span class="badge b-green">HOLDING THE STANDARD</span>':'<span class="badge b-red">MISSING OFFICE DAYS</span>';
         targetsHtml+=`<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
           <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="lbl" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">${esc(t.label)} — goal ${t.goal}/day Mon–Fri</div>${badge}</div>
+            <div class="lbl" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">${esc(t.label)} — goal ${t.goal}/day ${odLbl}</div>${badge}</div>
           <div style="display:flex;gap:22px;margin:10px 0 4px;flex-wrap:wrap">
             <div><span class="serif" style="font-size:32px;font-weight:500">${compliant}<span style="font-size:18px;color:var(--muted)">/${vals.length}</span></span><div class="mini">office days hit ${t.goal}+</div></div>
             <div><span class="serif" style="font-size:32px;font-weight:500">${avg}</span><div class="mini">avg dials / office day</div></div>
@@ -727,11 +729,32 @@ function renderPlans(){
         chartJobs.push({id:`planChart${pi}_${ti}`,days,vals,goal:t.goal});
       }
       if(t.kind==="appts"&&a){
-        const days=[]; const today=new Date(dstr(NOW)+"T00:00:00Z");
-        for(let d=new Date(start);d<=today&&d<end;d=new Date(d.getTime()+DAY)) days.push(dstr(d));
-        const s=DATA.series[a.id]||{};
-        const n=days.reduce((x,dd)=>x+((s[dd]&&s[dd].a)||0),0);
-        targetsHtml+=`<div style="margin-top:14px" class="mini"><b>${n}</b> appointments set since plan start — watch this rise as the dials hold.</div>`;
+        const startDay=dstr(start), todayISO=dstr(NOW);
+        const all=(DATA.apptsByAgent&&DATA.apptsByAgent[a.id])||[];
+        const list=all.filter(ap=>ap.created&&ap.created>=startDay).sort((x,y)=>String(x.start||x.created).localeCompare(String(y.start||y.created)));
+        const n=list.length;
+        const upcomingN=list.filter(ap=>ap.start&&String(ap.start).slice(0,10)>=todayISO).length;
+        const fmtWhen=ap=>{
+          if(!ap.start) return ap.created?new Date(ap.created+"T00:00:00Z").toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"}):"—";
+          const dt=new Date(ap.start), ds=dt.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+          return ap.allDay?ds:ds+" "+dt.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+        };
+        const rows=list.map(ap=>{
+          const upc=ap.start?(String(ap.start).slice(0,10)>=todayISO):false;
+          const who=ap.clientId?`<a href="${fub(ap.clientId)}" target="_blank">${esc(ap.client||"Client")}</a>`:(ap.client?esc(ap.client):'<span class="dim">internal</span>');
+          const what=esc(ap.type||ap.title||"Appointment");
+          const oc=ap.outcome?` · <span class="dim">${esc(ap.outcome)}</span>`:"";
+          const tag=upc?' <span class="badge b-green" style="font-size:9px;padding:1px 6px;vertical-align:middle">UPCOMING</span>':"";
+          return `<tr><td style="white-space:nowrap;vertical-align:top;padding:3px 10px 3px 0">${esc(fmtWhen(ap))}${tag}</td><td style="vertical-align:top;padding:3px 10px 3px 0">${who}</td><td style="vertical-align:top;padding:3px 0">${what}${oc}</td></tr>`;
+        }).join("");
+        targetsHtml+=`<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
+          <div class="lbl" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">${esc(t.label)}</div>
+          <div style="display:flex;align-items:baseline;gap:10px;margin-top:6px">
+            <span class="serif" style="font-size:32px;font-weight:500">${n}</span>
+            <div class="mini">appointment${n===1?"":"s"} set since plan start${upcomingN?` · ${upcomingN} upcoming`:""}</div>
+          </div>
+          ${n?`<table class="mini" style="width:100%;margin-top:10px;border-collapse:collapse"><thead><tr style="text-align:left;color:var(--muted)"><th style="font-weight:600;padding:2px 10px 6px 0">When</th><th style="font-weight:600;padding:2px 10px 6px 0">Client</th><th style="font-weight:600;padding:2px 0 6px 0">Type / title</th></tr></thead><tbody>${rows}</tbody></table>`:`<div class="mini" style="margin-top:8px">No appointments logged yet since plan start.</div>`}
+        </div>`;
       }
     });
     const checkin=pl.checkIn?new Date(pl.checkIn+"T00:00:00Z"):null;

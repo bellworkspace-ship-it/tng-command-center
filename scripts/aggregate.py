@@ -154,11 +154,28 @@ for c in jl("calls.jsonl"):
             {"in": bool(c.get("isIncoming")), "dur": c.get("duration") or 0})
 
 # ---------- APPOINTMENTS ----------
+appts_by_agent = {}
 for a in jl("appts.jsonl"):
     dt = parse(a.get("created"))
     cb = a.get("createdBy")
     uid = a.get("createdById") or (cb.get("id") if isinstance(cb, dict) else None)
     bump(uid, dt, "a")
+    if uid in agents:
+        client = client_id = None
+        for inv in (a.get("invitees") or []):
+            if inv.get("personId"):
+                client = (inv.get("name") or "").strip(); client_id = inv.get("personId"); break
+        typ = a.get("type"); typ = typ.get("name") if isinstance(typ, dict) else typ
+        outc = a.get("outcome"); outc = outc.get("name") if isinstance(outc, dict) else outc
+        appts_by_agent.setdefault(uid, []).append({
+            "created": day(dt), "start": a.get("start"),
+            "title": (a.get("title") or "").strip()[:90],
+            "type": typ, "outcome": outc,
+            "client": client, "clientId": client_id,
+            "allDay": bool(a.get("allDay"))})
+for _aid in appts_by_agent:
+    appts_by_agent[_aid].sort(key=lambda x: str(x.get("start") or x.get("created") or ""))
+    appts_by_agent[_aid] = appts_by_agent[_aid][-80:]
 
 # ---------- TASKS ----------
 upcoming = {aid: 0 for aid in agents}
@@ -246,7 +263,7 @@ for rec in jl("watch_raw.jsonl"):
 out = {"generatedAt": NOW.isoformat(), "ytdStart": day(YTD_START),
        "agents": [{**agents[aid], "book": books[aid], "upcomingTasks": upcoming.get(aid, 0)} for aid in agents],
        "series": series, "deals": deals, "stuck": stuck,
-       "leads15": leads15, "watch": watch}
+       "leads15": leads15, "watch": watch, "apptsByAgent": appts_by_agent}
 path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(WD, "dashboard_data.json")
 json.dump(out, open(path, "w"))
 print(f"wrote {path} ({os.path.getsize(path)//1024} KB) — watch={len(watch)} stuck={len(stuck)} leads15={len(leads15)} deals={len(deals)}")
