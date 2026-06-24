@@ -10,7 +10,7 @@ D15, D7 = NOW - timedelta(days=15), NOW - timedelta(days=7)
 
 EXCLUDE = {"luke newcomer", "sadie newcomer", "chris mury", "tommy scott",
            "ashley turner", "ryan raymond", "steven bell", "danielle hixon",
-           "christina poehlman", "allie gardner"}
+           "christina poehlman", "allie gardner", "jessie dittmer"}
 STAGE_ORDER = {"lead": 0, "attempted contact": 1, "spoke with customer": 2,
                "appointment set": 3, "met with customer": 4, "showing homes": 5,
                "submitting offers": 6, "under contract": 7, "pending": 7,

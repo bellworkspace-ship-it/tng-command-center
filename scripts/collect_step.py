@@ -19,7 +19,7 @@ if not KEY:
 AUTH = "Basic " + base64.b64encode((KEY + ":").encode()).decode()
 EXCLUDE = {"luke newcomer", "sadie newcomer", "chris mury", "tommy scott",
            "ashley turner", "ryan raymond", "steven bell", "danielle hixon",
-           "christina poehlman"}
+           "christina poehlman", "jessie dittmer"}
 NOW = datetime.now(timezone.utc)
 YTD_START = datetime(NOW.year, 1, 1, tzinfo=timezone.utc)
 
